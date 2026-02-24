@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useSettings } from '../../hooks/useSettings';
 import { useLanguage } from '../../context/LanguageContext';
+import './ContactPage.css';
 
 export default function ContactPage() {
   const { get } = useSettings();
@@ -30,6 +31,7 @@ export default function ContactPage() {
         <div className="container">
           <div className="ct-grid">
 
+            {/* ===== LEFT ===== */}
             <div className="ct-left">
               <h1 className="ct-title">{t('contact_title')}</h1>
 
@@ -39,12 +41,14 @@ export default function ContactPage() {
                 <p>{get('contact_address','เลขที่ 15 ถ.กาญจนวณิชย์ ต.หาดใหญ่ อ.หาดใหญ่ จ.สงขลา 90110')}</p>
               </div>
 
-              {get('contact_factory_image') && (
-                <div className="ct-factory-img">
-                  <img src={get('contact_factory_image')} alt="factory" />
-                  <p>{t('contact_factory')}</p>
-                </div>
-              )}
+              {/* รูปโรงงาน */}
+              <div className="ct-factory-img">
+                <img
+                  src={get('contact_factory_image') || '/factory.png'}
+                  alt="factory"
+                />
+                <p>รูปโรงงาน</p>
+              </div>
 
               <div className="ct-contacts">
                 {contacts.map((c, i) => (
@@ -63,6 +67,7 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* ===== RIGHT ===== */}
             <div className="ct-right">
               <div className="ct-map-wrap">
                 <iframe
