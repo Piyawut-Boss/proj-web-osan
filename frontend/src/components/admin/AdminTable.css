@@ -1,0 +1,10 @@
+.admin-table-wrap { overflow-x: auto; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
+.admin-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.9rem; }
+.admin-table thead { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+.admin-table th { padding: 14px 16px; text-align: left; color: white; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.3px; white-space: nowrap; }
+.admin-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-table tbody tr:hover td { background: #f8faff; }
+.empty-row { text-align: center; color: var(--text-light); padding: 48px; }
+.action-btns { display: flex; gap: 8px; flex-wrap: nowrap; }
+.admin-table img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }

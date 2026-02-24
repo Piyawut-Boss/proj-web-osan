@@ -1,0 +1,8 @@
+.public-layout { display: flex; flex-direction: column; min-height: 100vh; }
+.public-main { flex: 1; }
+
+/* Non-hero pages — padding-top must match navbar height */
+.public-main-offset { padding-top: 84px; }
+
+@media (max-width: 900px) { .public-main-offset { padding-top: 74px; } }
+@media (max-width: 700px) { .public-main-offset { padding-top: 68px; } }

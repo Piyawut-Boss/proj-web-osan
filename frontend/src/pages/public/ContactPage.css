@@ -1,0 +1,24 @@
+.ct-grid { display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start; }
+.ct-title { font-size:2.2rem;font-weight:800;color:var(--text-dark);margin-bottom:20px; }
+.ct-company { margin-bottom:20px; }
+.ct-company p { font-size:.95rem;color:var(--text-medium);line-height:1.7;margin:0; }
+.ct-factory-img { margin-bottom:24px; }
+.ct-factory-img img { width:100%;max-width:340px;border-radius:10px;margin-bottom:6px; }
+.ct-factory-img p { font-size:.78rem;color:var(--text-light);text-align:center;max-width:340px; }
+.ct-contacts { display:flex;flex-direction:column;gap:8px; }
+.ct-row { display:flex;align-items:center;gap:8px;margin-bottom:0; }
+.ct-icon { font-size:1.4rem;flex-shrink:0; }
+.ct-label { font-size:.92rem;color:var(--text-medium);display:flex;align-items:center;margin:0; }
+.ct-map-wrap { border-radius:12px;overflow:hidden;box-shadow:var(--shadow-md); }
+.ct-map-link { display:inline-block;margin-top:12px;font-size:.85rem;color:var(--primary);font-weight:600;text-decoration:none; }
+.ct-map-link:hover { text-decoration:underline; }
+@media(max-width:700px){ .ct-grid { grid-template-columns:1fr; } }
+
+/* Match footer icon size - 18px */
+.ct-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
