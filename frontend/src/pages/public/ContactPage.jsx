@@ -53,6 +53,7 @@ export default function ContactPage() {
                       src={c.icon}
                       alt={c.title}
                       className="ct-icon-img"
+                      style={{ width: '18px', height: '18px', flex: '0 0 18px' }}
                     />
                     <span className="ct-label">
                       <strong>{c.title} :</strong> {c.value}
