@@ -34,3 +34,15 @@
   .footer-bottom { flex-direction:column;gap:8px;text-align:center; }
   .footer-logo-img { height:38px; max-width:160px; }
 }
+.footer-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.footer-contacts p {
+  display: flex;
+  align-items: center;
+  gap: 8px;   
+  margin-bottom: 8px;
+}
