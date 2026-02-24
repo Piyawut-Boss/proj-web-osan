@@ -9,8 +9,8 @@ React + Express + **SQLite** (no database server required).
 ```bash
 # Terminal 1 — Backend
 cd backend
-npm install
-npm run dev       # http://localhost:5000 (SQLite auto-created)
+npm install        # Automatically initializes database if missing
+npm run dev       # http://localhost:5000
 
 # Terminal 2 — Frontend
 cd frontend
@@ -19,6 +19,12 @@ npm run dev       # http://localhost:5173
 ```
 
 **Admin:** `http://localhost:5173/admin/login` → `admin` / `admin123`
+
+**Note:** Database is auto-initialized on first `npm install`. If needed manually:
+```bash
+cd backend
+npm run init-db
+```
 
 ---
 
