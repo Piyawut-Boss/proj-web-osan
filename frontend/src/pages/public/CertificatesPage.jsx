@@ -18,8 +18,21 @@ export default function CertificatesPage() {
 
   useEffect(() => {
     api.get('/certificates')
-      .then(r => { const data = r.data.data || []; if (data.length > 0) setCerts(data); })
-      .catch(() => {});
+      .then(r => {
+        const data = r.data.data || [];
+        if (data.length > 0) {
+          // Merge API data with static images as fallback for missing images
+          const mergedCerts = data.map((cert, idx) => ({
+            ...cert,
+            image: cert.image || STATIC_CERTS[idx]?.image // Use static image if API doesn't have one
+          }));
+          setCerts(mergedCerts);
+        }
+      })
+      .catch(() => {
+        // Keep static certificates if API fails
+        setCerts(STATIC_CERTS);
+      });
   }, []);
 
   return (
