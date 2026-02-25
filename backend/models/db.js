@@ -19,6 +19,10 @@ const initPool = async () => {
       queueLimit: 0,
       enableKeepAlive: true,
       keepAliveInitialDelayMs: 0,
+      
+      ssl: { 
+        rejectUnauthorized: false 
+      }
     });
     
     console.log('✅ MySQL connected:', process.env.DB_NAME || 'psu_agro_food');
