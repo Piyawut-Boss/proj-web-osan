@@ -185,6 +185,34 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── RECOMMENDED PRODUCTS ─────────────────────────────────────── */}
+      {products.length > 0 && (
+        <section className="hp-recommended">
+          <div className="container">
+            <h2 className="section-title">{t('home_recommended_products')}</h2>
+            <div className="hp-rec-grid">
+              {products.slice(0, 3).map((product, i) => (
+                <Link key={i} to={`/product/${product.id}`} className="hp-rec-card">
+                  <div className="hp-rec-img">
+                    {product.image ? (
+                      <img src={product.image} alt={getProductName(product)} />
+                    ) : (
+                      <div className="hp-img-ph lg">📦</div>
+                    )}
+                  </div>
+                  <span className="hp-rec-badge">{catLabel(product.category)}</span>
+                  <div className="hp-rec-body">
+                    <h3>{getProductName(product)}</h3>
+                    <p className="hp-rec-en">{product.name_en || product.name}</p>
+                    <p className="hp-rec-wt">{product.weight || 'N/A'}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
     </PublicLayout>
   );
 }
