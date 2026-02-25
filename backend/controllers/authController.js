@@ -43,11 +43,12 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const [rows] = await db.execute('SELECT id, username, role, created_at FROM admins WHERE id = ?', [req.user.id]);
+    const [rows] = await db.execute('SELECT id, username, created_at FROM admins WHERE id = ?', [req.user.id]);
     if (rows.length === 0) return res.status(404).json({ success: false, message: 'Admin not found' });
     res.json({ success: true, data: rows[0] });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Profile error:', error);
+    res.status(500).json({ success: false, message: 'Server error', details: error.message });
   }
 };
 
