@@ -30,10 +30,10 @@ api.interceptors.response.use(
 // Helper function to convert relative image paths to absolute URLs
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return '';
-  // If it's already a full URL, return as is
   if (imagePath.startsWith('http')) return imagePath;
-  // Add API base URL to relative paths
-  return `${API_BASE_URL}/${imagePath}`;
+  // ลบ / นำหน้าออกก่อนต่อ URL
+  const clean = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+  return `${API_BASE_URL}/${clean}`;
 };
 
 export default api;

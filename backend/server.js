@@ -49,6 +49,7 @@ app.use('/api/certificates',  require('./routes/certificates'));
 app.use('/api/board-members', require('./routes/boardMembers'));
 app.use('/api/banners',       require('./routes/banners'));
 app.use('/api/settings',      require('./routes/settings'));
+app.use('/api/products-home-images', require('./routes/productsHome'));
 
 // Initialize database endpoint (for dev setup)
 app.post('/api/init', async (req, res) => {
@@ -86,6 +87,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
   console.log(`✅ PSU Agro Food API on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
   console.log(`📁 MySQL: ${process.env.DB_NAME || 'psu_agro_food'} @ ${process.env.DB_HOST || 'localhost'}`);
 });

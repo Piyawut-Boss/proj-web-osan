@@ -11,6 +11,8 @@ export default function HomePage() {
   const { t, lang } = useLanguage();
   const [products, setProducts] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [homeImages, setHomeImages] = useState([]);
+  const [mainImgIdx, setMainImgIdx] = useState(0);
   const [idx, setIdx] = useState(0);
   const [acc, setAcc] = useState(0);
 
@@ -21,6 +23,7 @@ export default function HomePage() {
   useEffect(() => {
     api.get('/products').then(r => setProducts(r.data.data || [])).catch(() => {});
     api.get('/banners').then(r => setBanners(r.data.data || [])).catch(() => {});
+    api.get('/products-home-images').then(r => setHomeImages(r.data.data || [])).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -44,9 +47,6 @@ export default function HomePage() {
 
   const phone = get('contact_phone', '062-163-9888').split(',')[0].trim();
 
-  // Get PSU Blen products from database
-  const psuBlenProducts = products.filter(p => p.category === 'psu_blen').slice(0, 3);
-
   const catLabel = c => ({ psu_blen: 'PSU Blen', meal_box: 'Meal Box', oem: 'OEM' })[c] || c;
 
   const accItems = [
@@ -58,6 +58,9 @@ export default function HomePage() {
   const heroBg = banners.length > 0 && banners[idx]?.image
     ? getImageUrl(banners[idx].image)
     : get('hero_banner_image') || '/hero-banner.png';
+
+  // รูปเล็กคือทุกรูปยกเว้นรูปที่เป็น main
+  const smallImages = homeImages.filter((_, i) => i !== mainImgIdx);
 
   return (
     <PublicLayout fullWidthHero>
@@ -99,22 +102,42 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* ── รูปจาก uploads/productsHome ── */}
           <div className="hp-sc-imgs">
-            <div className="hp-sc-main">
-              {psuBlenProducts[0]?.image
-                ? <img src={getImageUrl(psuBlenProducts[0].image)} alt={getProductName(psuBlenProducts[0])} />
-                : <div className="hp-img-ph">🥛</div>}
-            </div>
-
-            <div className="hp-sc-side">
-              {[psuBlenProducts[1], psuBlenProducts[2]].map((p, i) => (
-                <div key={i} className="hp-sc-small">
-                  {p?.image
-                    ? <img src={getImageUrl(p.image)} alt={getProductName(p)} />
-                    : <div className="hp-img-ph sm">🥛</div>}
+            {homeImages.length > 0 ? (
+              <>
+                {/* รูปใหญ่ */}
+                <div className="hp-sc-main">
+                  <img src={getImageUrl(homeImages[mainImgIdx])} alt="product main" />
                 </div>
-              ))}
-            </div>
+
+                {/* รูปเล็ก คลิกแล้วสลับกับรูปใหญ่ */}
+                {smallImages.length > 0 && (
+                  <div className="hp-sc-side">
+                    {smallImages.map((img, i) => (
+                      <div
+                        key={i}
+                        className="hp-sc-small"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setMainImgIdx(homeImages.indexOf(img))}
+                      >
+                        <img src={getImageUrl(img)} alt={`product ${i + 2}`} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="hp-sc-main">
+                  <div className="hp-img-ph">🥛</div>
+                </div>
+                <div className="hp-sc-side">
+                  <div className="hp-sc-small"><div className="hp-img-ph sm">🥛</div></div>
+                  <div className="hp-sc-small"><div className="hp-img-ph sm">🥛</div></div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
