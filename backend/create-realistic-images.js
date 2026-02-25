@@ -133,6 +133,7 @@ async function createRealisticImages() {
   const products = [
     { name: 'psu-blen-350g.png', title: 'PSU Blen 350g', color: [41, 128, 185] }, // Professional blue
     { name: 'psu-blen-200g.png', title: 'PSU Blen 200g', color: [52, 152, 219] }, // Light blue
+    { name: 'psu-blen-150g.png', title: 'PSU Blen 150g', color: [30, 100, 160] }, // Darker blue
     { name: 'chicken-massaman.png', title: 'Chicken Massaman', color: [230, 126, 34] }, // Orange
     { name: 'garlic-chicken.png', title: 'Garlic Chicken', color: [211, 84, 0] }, // Dark orange
     { name: 'spicy-catfish.png', title: 'Spicy Catfish', color: [192, 57, 43] }, // Red
