@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useSettings } from '../../hooks/useSettings';
 import { useLanguage } from '../../context/LanguageContext';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 import './HomePage.css';
-
-const BASE_URL = "http://localhost:5000"; // 🔥 เปลี่ยนเป็น domain จริงตอน deploy
 
 export default function HomePage() {
   const { get, getLines } = useSettings();
@@ -46,21 +44,8 @@ export default function HomePage() {
 
   const phone = get('contact_phone', '062-163-9888').split(',')[0].trim();
 
-  // 🔥 FIX PSU BLEN IMAGE (ใช้ path ตรงจาก backend)
-  const psuBlen = [
-    {
-      image: `${BASE_URL}/uploads/products/PSUBLen/PSUBLen1.jpg`,
-      name: 'PSU Blen 1'
-    },
-    {
-      image: `${BASE_URL}/uploads/products/PSUBLen/PSUBLen2.jpg`,
-      name: 'PSU Blen 2'
-    },
-    {
-      image: `${BASE_URL}/uploads/products/PSUBLen/PSUBLen3.jpg`,
-      name: 'PSU Blen 3'
-    }
-  ];
+  // Get PSU Blen products from database
+  const psuBlenProducts = products.filter(p => p.category === 'psu_blen').slice(0, 3);
 
   const catLabel = c => ({ psu_blen: 'PSU Blen', meal_box: 'Meal Box', oem: 'OEM' })[c] || c;
 
@@ -71,7 +56,7 @@ export default function HomePage() {
   ];
 
   const heroBg = banners.length > 0 && banners[idx]?.image
-    ? banners[idx].image
+    ? getImageUrl(banners[idx].image)
     : get('hero_banner_image') || '/hero-banner.png';
 
   return (
@@ -116,16 +101,16 @@ export default function HomePage() {
 
           <div className="hp-sc-imgs">
             <div className="hp-sc-main">
-              {psuBlen[0]?.image
-                ? <img src={psuBlen[0].image} alt={psuBlen[0].name} />
+              {psuBlenProducts[0]?.image
+                ? <img src={getImageUrl(psuBlenProducts[0].image)} alt={getProductName(psuBlenProducts[0])} />
                 : <div className="hp-img-ph">🥛</div>}
             </div>
 
             <div className="hp-sc-side">
-              {[psuBlen[1], psuBlen[2]].map((p, i) => (
+              {[psuBlenProducts[1], psuBlenProducts[2]].map((p, i) => (
                 <div key={i} className="hp-sc-small">
                   {p?.image
-                    ? <img src={p.image} alt={p.name} />
+                    ? <img src={getImageUrl(p.image)} alt={getProductName(p)} />
                     : <div className="hp-img-ph sm">🥛</div>}
                 </div>
               ))}
@@ -138,11 +123,15 @@ export default function HomePage() {
       <section className="hp-mealbox">
         <div className="container hp-mb-grid">
           <div className="hp-mb-left">
-            <img
-              src={`${BASE_URL}/uploads/products/MealBox/MealBox.png`}
-              alt="meal box"
-              className="hp-mb-img"
-            />
+            {products.find(p => p.category === 'meal_box')?.image ? (
+              <img
+                src={getImageUrl(products.find(p => p.category === 'meal_box').image)}
+                alt="meal box"
+                className="hp-mb-img"
+              />
+            ) : (
+              <div className="hp-img-ph lg">🍱</div>
+            )}
           </div>
 
           <div className="hp-mb-right">
@@ -192,10 +181,10 @@ export default function HomePage() {
             <h2 className="section-title">{t('home_recommended_products')}</h2>
             <div className="hp-rec-grid">
               {products.slice(0, 3).map((product, i) => (
-                <Link key={i} to={`/product/${product.id}`} className="hp-rec-card">
+                <Link key={i} to={`/products/${product.id}`} className="hp-rec-card">
                   <div className="hp-rec-img">
                     {product.image ? (
-                      <img src={product.image} alt={getProductName(product)} />
+                      <img src={getImageUrl(product.image)} alt={getProductName(product)} />
                     ) : (
                       <div className="hp-img-ph lg">📦</div>
                     )}
