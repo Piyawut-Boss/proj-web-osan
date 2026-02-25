@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useSettings } from '../../hooks/useSettings';
 import { useLanguage } from '../../context/LanguageContext';
+import { getImageUrl } from '../../utils/api';
 import './AboutPage.css';
 
 export default function AboutPage() {
@@ -66,7 +67,7 @@ export default function AboutPage() {
             {coreValues.map((cv,i) => (
               <div key={i} className="ab-cv-card">
                 {cv.image
-                  ? <img src={cv.image} alt={cv.title} className="ab-cv-img"/>
+                  ? <img src={getImageUrl(cv.image)} alt={cv.title} className="ab-cv-img"/>
                   : <div className="ab-cv-img-ph">🏭</div>
                 }
                 <p className="ab-cv-title">{cv.title}</p>
@@ -85,7 +86,7 @@ export default function AboutPage() {
               <div key={i} className={`ab-tl-row${i%2===0?'':' ab-tl-right'}`}>
                 <div className="ab-tl-img-col">
                   {item.image
-                    ? <img src={item.image} alt={item.year} className="ab-tl-img"/>
+                    ? <img src={getImageUrl(item.image)} alt={item.year} className="ab-tl-img"/>
                     : <div className="ab-tl-img-ph">🏗️</div>
                   }
                 </div>

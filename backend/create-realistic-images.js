@@ -142,6 +142,13 @@ async function createRealisticImages() {
     { name: 'oem-sauces.png', title: 'OEM Sauces', color: [231, 76, 60] }, // Dark red
     { name: 'oem-beverages.png', title: 'OEM Beverages', color: [52, 73, 94] }, // Dark blue-gray
     { name: 'oem-health-products.png', title: 'OEM Health Products', color: [16, 112, 2] }, // Dark green
+    { name: 'timeline-2567.png', title: 'Timeline 2567', color: [255, 193, 7] }, // Golden
+    { name: 'timeline-2568.png', title: 'Timeline 2568', color: [33, 150, 243] }, // Sky blue
+    { name: 'timeline-present.png', title: 'Timeline Present', color: [76, 175, 80] }, // Green
+    { name: 'core-value-1.png', title: 'Core Value 1', color: [233, 30, 99] }, // Pink
+    { name: 'core-value-2.png', title: 'Core Value 2', color: [103, 58, 183] }, // Deep purple
+    { name: 'core-value-3.png', title: 'Core Value 3', color: [0, 188, 212] }, // Cyan
+    { name: 'core-value-4.png', title: 'Core Value 4', color: [255, 152, 0] }, // Amber
   ];
 
   console.log('📦 Creating Product Images...');
