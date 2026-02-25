@@ -11,6 +11,12 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5177,http://localhost:5178,http://localhost:5179,http://localhost:5180,http://localhost:5181,http://localhost:5182')
   .split(',').map(s => s.trim());
 
+// Debug: Log all incoming origins
+app.use((req, res, next) => {
+  console.log(`📍 ${req.method} ${req.path} - Origin: "${req.headers.origin || 'no-origin'}"`);
+  next();
+});
+
 app.use(cors({
   origin: function(origin, callback) {
     // Allow requests with no origin (Postman, curl, same-origin in prod)
@@ -19,8 +25,10 @@ app.use(cors({
     }
     // Check if origin is in whitelist or is an ngrok domain
     if (allowedOrigins.includes(origin) || origin.includes('.ngrok-free.dev') || origin.includes('.ngrok.io')) {
+      console.log(`✅ CORS allowed: ${origin}`);
       return callback(null, true);
     }
+    console.log(`❌ CORS blocked: ${origin}`);
     callback(new Error('CORS not allowed: ' + origin));
   },
   credentials: true,
