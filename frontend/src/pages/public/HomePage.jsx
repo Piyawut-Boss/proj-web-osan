@@ -15,6 +15,7 @@ export default function HomePage() {
   const [mainImgIdx, setMainImgIdx] = useState(0);
   const [idx, setIdx] = useState(0);
   const [acc, setAcc] = useState(0);
+  const [mbIdx, setMbIdx] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -33,7 +34,15 @@ export default function HomePage() {
     }
   }, [banners.length]);
 
-  // Get product name in current language
+  const mealBoxProducts = products.filter(p => p.category === 'meal_box');
+
+  useEffect(() => {
+    if (mealBoxProducts.length > 1) {
+      const timer = setInterval(() => setMbIdx(i => (i + 1) % mealBoxProducts.length), 3000);
+      return () => clearInterval(timer);
+    }
+  }, [mealBoxProducts.length]);
+
   const getProductName = (product) => {
     const nameMap = {
       'th': product.name,
@@ -59,7 +68,6 @@ export default function HomePage() {
     ? getImageUrl(banners[idx].image)
     : get('hero_banner_image') || '/hero-banner.png';
 
-  // รูปเล็กคือทุกรูปยกเว้นรูปที่เป็น main
   const smallImages = homeImages.filter((_, i) => i !== mainImgIdx);
 
   return (
@@ -102,16 +110,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── รูปจาก uploads/productsHome ── */}
           <div className="hp-sc-imgs">
             {homeImages.length > 0 ? (
               <>
-                {/* รูปใหญ่ */}
                 <div className="hp-sc-main">
                   <img src={getImageUrl(homeImages[mainImgIdx])} alt="product main" />
                 </div>
-
-                {/* รูปเล็ก คลิกแล้วสลับกับรูปใหญ่ */}
                 {smallImages.length > 0 && (
                   <div className="hp-sc-side">
                     {smallImages.map((img, i) => (
@@ -146,12 +150,25 @@ export default function HomePage() {
       <section className="hp-mealbox">
         <div className="container hp-mb-grid">
           <div className="hp-mb-left">
-            {products.find(p => p.category === 'meal_box')?.image ? (
-              <img
-                src={getImageUrl(products.find(p => p.category === 'meal_box').image)}
-                alt="meal box"
-                className="hp-mb-img"
-              />
+            {mealBoxProducts.length > 0 ? (
+              <>
+                <img
+                  src={getImageUrl(mealBoxProducts[mbIdx].image)}
+                  alt="meal box"
+                  className="hp-mb-img"
+                />
+                {mealBoxProducts.length > 1 && (
+                  <div className="hp-dots">
+                    {mealBoxProducts.map((_, i) => (
+                      <button
+                        key={i}
+                        className={`hp-dot${i === mbIdx ? ' active' : ''}`}
+                        onClick={() => setMbIdx(i)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <div className="hp-img-ph lg">🍱</div>
             )}
@@ -201,7 +218,7 @@ export default function HomePage() {
       {products.length > 0 && (
         <section className="hp-recommended">
           <div className="container">
-            <h2 className="section-title">{t('home_recommended_products')}</h2>
+            <h2 className="section-title">{t('Recommended products')}</h2>
             <div className="hp-rec-grid">
               {products.slice(0, 3).map((product, i) => (
                 <Link key={i} to={`/products/${product.id}`} className="hp-rec-card">

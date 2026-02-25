@@ -21,16 +21,14 @@ export default function CertificatesPage() {
       .then(r => {
         const data = r.data.data || [];
         if (data.length > 0) {
-          // Merge API data with static images as fallback for missing images
           const mergedCerts = data.map((cert, idx) => ({
             ...cert,
-            image: cert.image || STATIC_CERTS[idx]?.image // Use static image if API doesn't have one
+            image: cert.image || STATIC_CERTS[idx]?.image
           }));
           setCerts(mergedCerts);
         }
       })
       .catch(() => {
-        // Keep static certificates if API fails
         setCerts(STATIC_CERTS);
       });
   }, []);
@@ -41,7 +39,6 @@ export default function CertificatesPage() {
         <div className="container">
           <h1 className="section-title">{t('cert_title')}</h1>
 
-          {/* Stacked full-width certificates */}
           <div className="cert-list">
             {certs.map(c => (
               <div key={c.id} className="cert-item">
@@ -92,7 +89,10 @@ export default function CertificatesPage() {
         }
 
         .cert-img {
-          width: 100%;
+          width: auto;
+          max-width: 480px;
+          max-height: 680px;
+          object-fit: contain;
           display: block;
           cursor: zoom-in;
           border-radius: 4px;
@@ -115,8 +115,8 @@ export default function CertificatesPage() {
 
         .cert-label {
           margin-top: 14px;
-          font-size: 1rem;
-          font-weight: 600;
+          font-size: 1.15rem;
+          font-weight: 700;
           color: var(--text-dark);
           text-align: center;
         }
@@ -161,7 +161,7 @@ export default function CertificatesPage() {
         }
 
         .cert-lb-title {
-          font-size: 0.95rem;
+          font-size: 1rem;
           font-weight: 700;
           color: var(--primary);
         }
@@ -187,7 +187,11 @@ export default function CertificatesPage() {
 
         @media (max-width: 600px) {
           .cert-list { gap: 36px; }
-          .cert-label { font-size: 0.9rem; }
+          .cert-img {
+            max-width: 100%;
+            max-height: 500px;
+          }
+          .cert-label { font-size: 1rem; }
         }
       `}</style>
     </PublicLayout>
