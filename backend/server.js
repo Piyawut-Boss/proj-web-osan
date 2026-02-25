@@ -8,14 +8,20 @@ const app = express();
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
-const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173,http://localhost:5174')
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5177,http://localhost:5178,http://localhost:5179,http://localhost:5180,http://localhost:5181,http://localhost:5182')
   .split(',').map(s => s.trim());
 
 app.use(cors({
-  origin: (origin, cb) => {
+  origin: function(origin, callback) {
     // Allow requests with no origin (Postman, curl, same-origin in prod)
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    cb(new Error('CORS not allowed: ' + origin));
+    if (!origin) {
+      return callback(null, true);
+    }
+    // Check if origin is in whitelist or is an ngrok domain
+    if (allowedOrigins.includes(origin) || origin.includes('.ngrok-free.dev') || origin.includes('.ngrok.io')) {
+      return callback(null, true);
+    }
+    callback(new Error('CORS not allowed: ' + origin));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
