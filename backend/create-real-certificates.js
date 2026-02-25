@@ -2,61 +2,83 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-// Function to create a text-based certificate image in PNG format
-function createCertificatePNG(width, height, title, details) {
-  // Create raw image data with gradient background
+// Function to create realistic certificate images
+function createCertificatePNG(width, height, bgColor1, bgColor2, accentColor) {
+  // Create raw image data
   const pixels = Buffer.alloc(width * height * 3);
   
-  // Background: Light cream/certificate color (#F5E6D3)
-  const bgColor = [245, 230, 211];
-  
-  // Create gradient from top
+  // Create gradient background
   for (let y = 0; y < height; y++) {
     const t = y / height;
     for (let x = 0; x < width; x++) {
       const idx = (y * width + x) * 3;
-      // Gradient effect
-      pixels[idx] = Math.min(255, Math.floor(bgColor[0] + t * 10));
-      pixels[idx + 1] = Math.min(255, Math.floor(bgColor[1] + t * 15));
-      pixels[idx + 2] = Math.min(255, Math.floor(bgColor[2] + t * 10));
+      pixels[idx] = Math.floor(bgColor1[0] + (bgColor2[0] - bgColor1[0]) * t);
+      pixels[idx + 1] = Math.floor(bgColor1[1] + (bgColor2[1] - bgColor1[1]) * t);
+      pixels[idx + 2] = Math.floor(bgColor1[2] + (bgColor2[2] - bgColor1[2]) * t);
     }
   }
   
-  // Add decorative border (gold/brown lines)
-  const borderColor = [184, 134, 11]; // Dark goldenrod
-  const borderWidth = 3;
+  // Add decorative pattern - horizontal lines
+  const lineColor = [Math.max(0, accentColor[0] - 40), Math.max(0, accentColor[1] - 40), Math.max(0, accentColor[2] - 40)];
+  for (let y = 40; y < height - 40; y += 80) {
+    for (let x = 20; x < width - 20; x++) {
+      const idx = (y * width + x) * 3;
+      pixels[idx] = lineColor[0];
+      pixels[idx + 1] = lineColor[1];
+      pixels[idx + 2] = lineColor[2];
+    }
+  }
   
-  // Top and bottom borders
-  for (let x = 0; x < width; x++) {
-    for (let b = 0; b < borderWidth; b++) {
+  // Add accent frame border (double line effect)
+  const borderPadding = 10;
+  for (let x = borderPadding; x < width - borderPadding; x++) {
+    for (let line = 0; line < 2; line++) {
       // Top border
-      const topIdx = (b * width + x) * 3;
-      pixels[topIdx] = borderColor[0];
-      pixels[topIdx + 1] = borderColor[1];
-      pixels[topIdx + 2] = borderColor[2];
+      const topIdx = ((borderPadding + line) * width + x) * 3;
+      pixels[topIdx] = accentColor[0];
+      pixels[topIdx + 1] = accentColor[1];
+      pixels[topIdx + 2] = accentColor[2];
       
       // Bottom border
-      const bottomIdx = ((height - 1 - b) * width + x) * 3;
-      pixels[bottomIdx] = borderColor[0];
-      pixels[bottomIdx + 1] = borderColor[1];
-      pixels[bottomIdx + 2] = borderColor[2];
+      const bottomIdx = ((height - borderPadding - 2 + line) * width + x) * 3;
+      pixels[bottomIdx] = accentColor[0];
+      pixels[bottomIdx + 1] = accentColor[1];
+      pixels[bottomIdx + 2] = accentColor[2];
     }
   }
   
   // Left and right borders
-  for (let y = 0; y < height; y++) {
-    for (let b = 0; b < borderWidth; b++) {
+  for (let y = borderPadding; y < height - borderPadding; y++) {
+    for (let line = 0; line < 2; line++) {
       // Left border
-      const leftIdx = (y * width + b) * 3;
-      pixels[leftIdx] = borderColor[0];
-      pixels[leftIdx + 1] = borderColor[1];
-      pixels[leftIdx + 2] = borderColor[2];
+      const leftIdx = (y * width + borderPadding + line) * 3;
+      pixels[leftIdx] = accentColor[0];
+      pixels[leftIdx + 1] = accentColor[1];
+      pixels[leftIdx + 2] = accentColor[2];
       
       // Right border
-      const rightIdx = (y * width + (width - 1 - b)) * 3;
-      pixels[rightIdx] = borderColor[0];
-      pixels[rightIdx + 1] = borderColor[1];
-      pixels[rightIdx + 2] = borderColor[2];
+      const rightIdx = (y * width + (width - borderPadding - 2 + line)) * 3;
+      pixels[rightIdx] = accentColor[0];
+      pixels[rightIdx + 1] = accentColor[1];
+      pixels[rightIdx + 2] = accentColor[2];
+    }
+  }
+  
+  // Add circular seal in center (certificate official stamp effect)
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const sealRadius = 40;
+  const sealColor = accentColor;
+  
+  for (let y = Math.max(0, Math.floor(centerY - sealRadius)); y < Math.min(height, Math.ceil(centerY + sealRadius)); y++) {
+    for (let x = Math.max(0, Math.floor(centerX - sealRadius)); x < Math.min(width, Math.ceil(centerX + sealRadius)); x++) {
+      const dist = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+      if (dist < sealRadius && dist > sealRadius - 3) {
+        const idx = (y * width + x) * 3;
+        pixels[idx] = sealColor[0];
+        pixels[idx + 1] = sealColor[1];
+        pixels[idx + 2] = sealColor[2];
+      }
     }
   }
   
@@ -146,21 +168,21 @@ async function createCertificates() {
   
   console.log('🎖️ Creating realistic certificate images...\n');
   
-  // Certificate 1: Halal Certificate (iso-9001.png)
+  // Certificate 1: Halal Certificate (iso-9001.png) - Green theme
   console.log('Creating: Halal Certificate (iso-9001.png)');
-  const halalImg = createCertificatePNG(600, 800, 'Halal Certificate', 'Thai Islamic Council');
+  const halalImg = createCertificatePNG(600, 800, [245, 250, 240], [235, 245, 230], [34, 139, 34]); // Green
   fs.writeFileSync(path.join(certDir, 'iso-9001.png'), halalImg);
   console.log('✅ Halal certificate created\n');
   
-  // Certificate 2: Food Production License (gmp-certified.png)
+  // Certificate 2: Food Production License (gmp-certified.png) - Blue theme
   console.log('Creating: Food Production License (gmp-certified.png)');
-  const gmpImg = createCertificatePNG(600, 800, 'Production License', 'Thai Government');
+  const gmpImg = createCertificatePNG(600, 800, [240, 248, 255], [230, 240, 255], [25, 85, 145]); // Blue
   fs.writeFileSync(path.join(certDir, 'gmp-certified.png'), gmpImg);
   console.log('✅ Food production license created\n');
   
-  // Certificate 3: Food Registration (haccp-approved.png)
+  // Certificate 3: Food Registration (haccp-approved.png) - Gold theme
   console.log('Creating: Food Registration Certificate (haccp-approved.png)');
-  const haccpImg = createCertificatePNG(600, 800, 'Registration Certificate', 'Thai FDA');
+  const haccpImg = createCertificatePNG(600, 800, [255, 250, 240], [255, 245, 230], [184, 134, 11]); // Gold
   fs.writeFileSync(path.join(certDir, 'haccp-approved.png'), haccpImg);
   console.log('✅ Food registration certificate created\n');
   
