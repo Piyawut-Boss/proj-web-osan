@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import AdminTable from '../../components/admin/AdminTable';
 import AdminModal from '../../components/admin/AdminModal';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 import './AdminPages.css';
 
 const EMPTY = { name: '', name_en: '', category: 'psu_blen', description: '', description_en: '', ingredients: '', weight: '', is_active: true };
@@ -121,7 +121,7 @@ const AdminProducts = () => {
             <label className="form-label">รูปภาพสินค้า</label>
             <div className="image-upload-area">
               {imagePreview
-                ? <img src={imagePreview} alt="preview" className="image-preview" />
+                ? <img src={imagePreview.startsWith('blob:') ? imagePreview : getImageUrl(imagePreview)} alt="preview" className="image-preview" />
                 : <div className="image-upload-placeholder"><span>📷</span><p>คลิกเพื่ออัปโหลดรูป</p></div>}
               <input type="file" accept="image/*" onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImagePreview(URL.createObjectURL(f)); } }} className="image-input" />
             </div>

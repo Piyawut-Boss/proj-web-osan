@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useLanguage } from '../../context/LanguageContext';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 import './AboutPage.css';
 
 export default function BoardPage() {
@@ -64,7 +64,7 @@ export default function BoardPage() {
                   {getFeatured('board') && (
                     <div className="ab-board-featured">
                       <div className="ab-board-featured-card">
-                        {getFeatured('board').image ? <img src={getFeatured('board').image} alt={getFeatured('board').name}/> : <div className="ab-board-featured-ph">👤</div>}
+                        {getFeatured('board').image ? <img src={getImageUrl(getFeatured('board').image)} alt={getFeatured('board').name}/> : <div className="ab-board-featured-ph">👤</div>}
                         <h3>{getFeatured('board').name || 'N/A'}</h3>
                         <p>{getFeatured('board').position || ''}</p>
                       </div>
@@ -74,7 +74,7 @@ export default function BoardPage() {
                     <div className="ab-board-management-grid">
                       {getGridMembers('board').map(m => m ? (
                         <div key={m.id} className="ab-board-card">
-                          {m.image ? <img src={m.image} alt={m.name}/> : <div className="ab-board-ph">👤</div>}
+                          {m.image ? <img src={getImageUrl(m.image)} alt={m.name}/> : <div className="ab-board-ph">👤</div>}
                           <h3>{m.name || 'N/A'}</h3>
                           <p>{m.position || ''}</p>
                         </div>
@@ -90,7 +90,7 @@ export default function BoardPage() {
                   {getFeatured('management') && (
                     <div className="ab-board-featured">
                       <div className="ab-board-featured-card">
-                        {getFeatured('management').image ? <img src={getFeatured('management').image} alt={getFeatured('management').name}/> : <div className="ab-board-featured-ph">👤</div>}
+                        {getFeatured('management').image ? <img src={getImageUrl(getFeatured('management').image)} alt={getFeatured('management').name}/> : <div className="ab-board-featured-ph">👤</div>}
                         <h3>{getFeatured('management').name || 'N/A'}</h3>
                         <p>{getFeatured('management').position || ''}</p>
                       </div>
@@ -100,7 +100,7 @@ export default function BoardPage() {
                     <div className="ab-board-management-grid">
                       {getGridMembers('management').map(m => m ? (
                         <div key={m.id} className="ab-board-card">
-                          {m.image ? <img src={m.image} alt={m.name}/> : <div className="ab-board-ph">👤</div>}
+                          {m.image ? <img src={getImageUrl(m.image)} alt={m.name}/> : <div className="ab-board-ph">👤</div>}
                           <h3>{m.name || 'N/A'}</h3>
                           <p>{m.position || ''}</p>
                         </div>

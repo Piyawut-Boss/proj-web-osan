@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useSettings } from '../../hooks/useSettings';
 import { useLanguage } from '../../context/LanguageContext';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 import './ProductDetailPage.css';
 
 export default function ProductDetailPage() {
@@ -64,7 +64,7 @@ export default function ProductDetailPage() {
             {/* Image */}
             <div className="pdp-img-col">
               {product.image
-                ? <img src={product.image} alt={getProductName()} className="pdp-img"/>
+                ? <img src={getImageUrl(product.image)} alt={getProductName()} className="pdp-img"/>
                 : <div className="pdp-img-ph">{product.category==='meal_box'?'🍱':'🥛'}</div>}
             </div>
 

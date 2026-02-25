@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useSettings } from '../../hooks/useSettings';
 import { useLanguage } from '../../context/LanguageContext';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 import './ProductsPage.css';
 
 export default function ProductsPage() {
@@ -90,7 +90,7 @@ export default function ProductsPage() {
               <div className="pp-product-list">
                 {filtered.filter(p=>p.category==='psu_blen').map(p => (
                   <Link key={p.id} to={`/products/${p.id}`} className="pp-product-row">
-                    <div className="pp-prod-img">{p.image ? <img src={p.image} alt={getProductName(p)}/> : <div className="pp-img-ph">🥛</div>}</div>
+                    <div className="pp-prod-img">{p.image ? <img src={getImageUrl(p.image)} alt={getProductName(p)}/> : <div className="pp-img-ph">🥛</div>}</div>
                     <div className="pp-prod-info">
                       <h4>{getProductName(p)}</h4>
                       {p.name_en && <p className="pp-prod-en">{p.name_en}</p>}
@@ -121,7 +121,7 @@ export default function ProductsPage() {
               <div className="pp-product-list">
                 {filtered.filter(p=>p.category==='meal_box').map(p => (
                   <Link key={p.id} to={`/products/${p.id}`} className="pp-product-row">
-                    <div className="pp-prod-img">{p.image ? <img src={p.image} alt={getProductName(p)}/> : <div className="pp-img-ph">🍱</div>}</div>
+                    <div className="pp-prod-img">{p.image ? <img src={getImageUrl(p.image)} alt={getProductName(p)}/> : <div className="pp-img-ph">🍱</div>}</div>
                     <div className="pp-prod-info">
                       <h4>{getProductName(p)}</h4>
                       {p.name_en && <p className="pp-prod-en">{p.name_en}</p>}
@@ -144,7 +144,7 @@ export default function ProductsPage() {
               <div className="pp-oem-inner">
                 <div className="pp-oem-left">
                   {get('oem_image')
-                    ? <img src={get('oem_image')} alt="OEM" className="pp-oem-img"/>
+                    ? <img src={getImageUrl(get('oem_image'))} alt="OEM" className="pp-oem-img"/>
                     : <div className="pp-img-ph lg">🏭</div>}
                 </div>
                 <div className="pp-oem-right">

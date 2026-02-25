@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PublicLayout from '../../components/public/PublicLayout';
 import { useLanguage } from '../../context/LanguageContext';
-import api from '../../utils/api';
+import api, { getImageUrl } from '../../utils/api';
 
 const STATIC_CERTS = [
   { id: 's1', title: 'หนังสือให้ใช้เครื่องหมายรับรองฮาลาล', image: '/cert-halal.png' },
@@ -47,7 +47,7 @@ export default function CertificatesPage() {
               <div key={c.id} className="cert-item">
                 {c.image
                   ? <img
-                      src={c.image}
+                      src={getImageUrl(c.image)}
                       alt={c.title}
                       className="cert-img"
                       onClick={() => setLightbox(c)}
@@ -67,7 +67,7 @@ export default function CertificatesPage() {
           <div className="cert-lb-inner" onClick={e => e.stopPropagation()}>
             <button className="cert-lb-close" onClick={() => setLightbox(null)}>✕</button>
             {lightbox.image
-              ? <img src={lightbox.image} alt={lightbox.title} />
+              ? <img src={getImageUrl(lightbox.image)} alt={lightbox.title} />
               : <div className="cert-ph big">📜</div>
             }
             <p className="cert-lb-title">{lightbox.title}</p>
