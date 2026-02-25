@@ -140,41 +140,36 @@ export default function ProductsPage() {
 
           {/* OEM GROUP */}
           {(cat==='all' || cat==='oem') && (
-            <div className="pp-group">
-              <div className="pp-group-header pp-oem-header">
-                <div className="pp-group-icon">🏭</div>
-                <div>
-                  <h3>{t('products_oem_title') || 'OEM'} <span>{t('products_oem_label') || 'บริการ OEM'}</span></h3>
-                  <p>{t('products_oem_desc') || 'รับผลิตอาหารและเครื่องดื่มครบวงจร'}<br/>{t('products_oem_en') || 'Complete OEM Manufacturing Services'}</p>
+            <div className="pp-group pp-oem-group">
+              <div className="pp-oem-inner">
+                <div className="pp-oem-left">
+                  {get('oem_image')
+                    ? <img src={getImageUrl(get('oem_image'))} alt="OEM" className="pp-oem-img"/>
+                    : <div className="pp-img-ph lg">🏭</div>}
+                </div>
+                <div className="pp-oem-right">
+                  <div className="pp-oem-logo-row">
+                    <span className="badge badge-primary">OEM</span>
+                    <span style={{fontSize:'.75rem',color:'var(--text-light)',marginLeft:8}}>PSU AGRO FOOD CO., LTD.</span>
+                  </div>
+                  <h3>{get('oem_section_title','บริการ OEM รับผลิตอาหารและเครื่องดื่มครบวงจร')}</h3>
+                  <p>{get('oem_description','เราให้บริการ OEM รับผลิตอาหาร, ซอส, เครื่องปรุง และเครื่องดื่ม ครบวงจร')}</p>
+                  <div className="pp-oem-steps">
+                    <h4>{t('oem_title')}</h4>
+                    {[
+                      t('oem_step1'),
+                      t('oem_step2'),
+                      t('oem_step3'),
+                      t('oem_step4'),
+                      t('oem_step5'),
+                    ].map((s,i) => <p key={i} className="pp-oem-step">{s}</p>)}
+                  </div>
+                  <div className="pp-oem-contact">
+                    <a href="https://line.me" target="_blank" rel="noreferrer" className="btn btn-primary">{t('products_oem_contact') || 'ติดต่อสอบถาม Line'}</a>
+                    <p className="pp-oem-tagline">{getLines('oem_tagline','PSU AGRO FOOD\n"สร้างสรรค์อนาคตของอาหารสุขภาพ เคียงข้างสังคม"').map((l,i) => <span key={i}>{l}<br/></span>)}</p>
+                  </div>
                 </div>
               </div>
-              <div className="pp-product-list">
-                {filtered.filter(p=>p.category==='oem').map(p => (
-                  <Link key={p.id} to={`/products/${p.id}`} className="pp-product-row">
-                    <div className="pp-prod-img">{p.image ? <img src={getImageUrl(p.image)} alt={getProductName(p)}/> : <div className="pp-img-ph">🏭</div>}</div>
-                    <div className="pp-prod-info">
-                      <h4>{getProductName(p)}</h4>
-                      {p.name_en && <p className="pp-prod-en">{p.name_en}</p>}
-                      <div className="pp-prod-tags">
-                        <span className="pp-tag badge-warning">OEM</span>
-                      </div>
-                      {p.description && <p className="pp-prod-desc">{p.description}</p>}
-                      {p.ingredients && <p className="pp-prod-ing"><strong>{t('products_ingredients') || 'Details:'}</strong> {p.ingredients}</p>}
-                    </div>
-                    <div className="pp-prod-arrow">→</div>
-                  </Link>
-                ))}
-              </div>
-              {filtered.filter(p=>p.category==='oem').length > 0 && (
-                <div className="pp-oem-contact-footer">
-                  <p style={{marginBottom:'15px', color:'var(--text-light)', fontSize:'0.95rem'}}>
-                    {get('oem_description','เราให้บริการ OEM รับผลิตอาหาร, ซอส, เครื่องปรุง และเครื่องดื่ม ครบวงจร')}
-                  </p>
-                  <a href="https://line.me" target="_blank" rel="noreferrer" className="btn btn-primary">
-                    {t('products_oem_contact') || 'ติดต่อสอบถาม Line'}
-                  </a>
-                </div>
-              )}
             </div>
           )}
 
