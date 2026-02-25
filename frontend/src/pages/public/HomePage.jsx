@@ -22,9 +22,9 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    api.get('/products').then(r => setProducts(r.data.data || [])).catch(() => {});
-    api.get('/banners').then(r => setBanners(r.data.data || [])).catch(() => {});
-    api.get('/products-home-images').then(r => setHomeImages(r.data.data || [])).catch(() => {});
+    api.get('products').then(r => setProducts(r.data.data || [])).catch(() => {});
+    api.get('banners').then(r => setBanners(r.data.data || [])).catch(() => {});
+    api.get('products-home-images').then(r => setHomeImages(r.data.data || [])).catch(() => {});
   }, []);
 
   useEffect(() => {

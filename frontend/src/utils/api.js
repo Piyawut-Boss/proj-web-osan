@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 const api = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: '/api',
   timeout: 30000,
   withCredentials: true,
 });
@@ -28,12 +26,13 @@ api.interceptors.response.use(
 );
 
 // Helper function to convert relative image paths to absolute URLs
+// Uses Vite proxy, so /uploads paths go through proxy to backend
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return '';
   if (imagePath.startsWith('http')) return imagePath;
-  // ลบ / นำหน้าออกก่อนต่อ URL
-  const clean = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-  return `${API_BASE_URL}/${clean}`;
+  // Return paths that work with Vite proxy: /uploads/... → backend through proxy
+  if (!imagePath.startsWith('/')) return `/${imagePath}`;
+  return imagePath;
 };
 
 export default api;

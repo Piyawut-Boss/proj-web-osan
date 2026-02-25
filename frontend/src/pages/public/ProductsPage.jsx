@@ -17,7 +17,7 @@ export default function ProductsPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => { api.get('/products').then(r => setProducts(r.data.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.get('products').then(r => setProducts(r.data.data || [])).catch(() => {}); }, []);
 
   // Get product name in current language
   const getProductName = (product) => {

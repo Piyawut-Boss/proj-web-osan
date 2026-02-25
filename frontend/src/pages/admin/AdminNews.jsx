@@ -20,9 +20,9 @@ const AdminNews = () => {
   const fetchData = () => {
     setLoading(true);
     // Use admin endpoint to get ALL news (including unpublished)
-    api.get('/news/admin/all')
+    api.get('news/admin/all')
       .then(r => setData(r.data.data || []))
-      .catch(() => api.get('/news').then(r => setData(r.data.data || [])))
+      .catch(() => api.get('news').then(r => setData(r.data.data || [])))
       .finally(() => setLoading(false));
   };
   
@@ -74,7 +74,7 @@ const AdminNews = () => {
       if (editing) {
         await api.put(`/news/${editing.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        await api.post('/news', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post('news', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       showAlert(editing ? 'อัปเดตข่าวสำเร็จ ✓' : 'เพิ่มข่าวสำเร็จ ✓');
       setModalOpen(false);

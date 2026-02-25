@@ -11,12 +11,14 @@ const deleteFile = (filePath) => {
   } catch (e) { /* ignore */ }
 };
 
-// Build full image URL from stored relative path
-const buildImageUrl = (req, filePath) => {
+// Build image URL - return relative path for proxy compatibility
+// Works both in development and with ngrok tunneling
+const buildImageUrl = (filePath) => {
   if (!filePath) return null;
   if (filePath.startsWith('http')) return filePath;
+  // Return relative path that works with Vite proxy: /uploads/...
   const clean = filePath.replace(/\\/g, '/').replace(/^\//, '');
-  return `${req.protocol}://${req.get('host')}/${clean}`;
+  return `/${clean}`;
 };
 
 // Normalize boolean from form data (string "true"/"false" or actual bool)
@@ -37,7 +39,7 @@ const getAllProducts = async (req, res) => {
     if (category) { query += ' AND category = ?'; params.push(category); }
     query += ' ORDER BY sort_order ASC, created_at DESC';
     const [rows] = await db.execute(query, params);
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -49,7 +51,7 @@ const getAllProductsAdmin = async (req, res) => {
     if (category) { query += ' WHERE category = ?'; params.push(category); }
     query += ' ORDER BY sort_order ASC, created_at DESC';
     const [rows] = await db.execute(query, params);
-    const data = rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) }));
+    const data = rows.map(r => ({ ...r, image: buildImageUrl(r.image) }));
     res.json({ success: true, data });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -61,7 +63,7 @@ const getProductById = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
     if (!rows.length) return res.status(404).json({ success: false, message: 'Product not found' });
-    res.json({ success: true, data: { ...rows[0], image: buildImageUrl(req, rows[0].image) } });
+    res.json({ success: true, data: { ...rows[0], image: buildImageUrl(rows[0].image) } });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -111,7 +113,7 @@ const deleteProduct = async (req, res) => {
 const getAllNews = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM news WHERE is_published = 1 ORDER BY created_at DESC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -119,14 +121,14 @@ const getNewsById = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM news WHERE id = ?', [req.params.id]);
     if (!rows.length) return res.status(404).json({ success: false, message: 'News not found' });
-    res.json({ success: true, data: { ...rows[0], image: buildImageUrl(req, rows[0].image) } });
+    res.json({ success: true, data: { ...rows[0], image: buildImageUrl(rows[0].image) } });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
 const getAllNewsAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM news ORDER BY created_at DESC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -175,14 +177,14 @@ const deleteNews = async (req, res) => {
 const getAllReviews = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM reviews WHERE is_active = 1 ORDER BY created_at DESC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
 const getAllReviewsAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM reviews ORDER BY created_at DESC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -230,7 +232,7 @@ const deleteReview = async (req, res) => {
 const getAllCertificates = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM certificates ORDER BY sort_order ASC, id ASC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -277,7 +279,7 @@ const deleteCertificate = async (req, res) => {
 const getAllBoardMembers = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM board_members ORDER BY section ASC, sort_order ASC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
@@ -326,14 +328,14 @@ const deleteBoardMember = async (req, res) => {
 const getAllBanners = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM banners WHERE is_active = 1 ORDER BY sort_order ASC, id ASC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
 const getAllBannersAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM banners ORDER BY sort_order ASC, id DESC');
-    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(req, r.image) })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 

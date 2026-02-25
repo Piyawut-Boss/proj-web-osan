@@ -2,13 +2,14 @@ const db = require('../models/db');
 const fs = require('fs');
 const path = require('path');
 
-// Convert stored relative path to full URL
-const toUrl = (req, val) => {
+// Convert stored relative path to relative URL for proxy compatibility
+// Works both in development and with ngrok tunneling
+const toUrl = (val) => {
   if (!val) return '';
   if (val.startsWith('http')) return val;
-  // Normalize backslashes (Windows) and strip leading slash
+  // Return relative path that works with Vite proxy: /uploads/...
   const clean = val.replace(/\\/g, '/').replace(/^\//, '');
-  return `${req.protocol}://${req.get('host')}/${clean}`;
+  return `/${clean}`;
 };
 
 const deleteOldFile = (val) => {
@@ -26,7 +27,7 @@ const getAll = async (req, res) => {
     const out = {};
     rows.forEach(r => {
       out[r.setting_key] = r.setting_type === 'image'
-        ? toUrl(req, r.setting_value || '')
+        ? toUrl(r.setting_value || '')
         : (r.setting_value || '');
     });
     res.json({ success: true, data: out });
@@ -42,7 +43,7 @@ const getAdmin = async (req, res) => {
     const out = rows.map(r => ({
       ...r,
       display_value: r.setting_type === 'image'
-        ? toUrl(req, r.setting_value || '')
+        ? toUrl(r.setting_value || '')
         : (r.setting_value || ''),
     }));
     res.json({ success: true, data: out });
@@ -85,7 +86,7 @@ const update = async (req, res) => {
     }
 
     await db.execute('UPDATE site_settings SET setting_value=? WHERE setting_key=?', [value, key]);
-    const returnVal = rows[0].setting_type === 'image' ? toUrl(req, value) : value;
+    const returnVal = rows[0].setting_type === 'image' ? toUrl(value) : value;
     res.json({ success: true, key, value: returnVal });
   } catch (e) {
     res.status(500).json({ success: false, message: e.message });

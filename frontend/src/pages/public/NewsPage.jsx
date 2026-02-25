@@ -12,8 +12,8 @@ export default function NewsPage() {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
-    api.get('/news').then(r => setNews(r.data.data || [])).catch(()=>{});
-    api.get('/reviews').then(r => setReviews(r.data.data || [])).catch(()=>{});
+    api.get('news').then(r => setNews(r.data.data || [])).catch(()=>{});
+    api.get('reviews').then(r => setReviews(r.data.data || [])).catch(()=>{});
   }, []);
   const fmtDate = d => d ? new Date(d).toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}) : '';
   return (

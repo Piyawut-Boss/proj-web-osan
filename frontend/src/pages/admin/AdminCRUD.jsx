@@ -41,7 +41,7 @@ const ModalActions = ({onClose,saving}) => (
 
 // ── REVIEWS ──────────────────────────────────────────────────────────────────
 export const AdminReviews = () => {
-  const {data,loading,save,remove,refetch} = useCRUD('/reviews/admin/all');
+  const {data,loading,save,remove,refetch} = useCRUD('reviews/admin/all');
   const [open,setOpen]=useState(false);
   const [editing,setEditing]=useState(null);
   const [form,setForm]=useState({title:'',description:''});
@@ -52,8 +52,8 @@ export const AdminReviews = () => {
   const showAlert=(m,t='success')=>{setAlert({m,t});setTimeout(()=>setAlert(null),3000)};
   const openCreate=()=>{setEditing(null);setForm({title:'',description:''});setImgFile(null);setImgPrev(null);setOpen(true)};
   const openEdit=r=>{setEditing(r);setForm({title:r.title||'',description:r.description||''});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
-  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'/reviews');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
-  const del=async id=>{try{await remove(id,'/reviews');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
+  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'reviews');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
+  const del=async id=>{try{await remove(id,'reviews');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
   const cols=[
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt=""/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'title',label:'หัวข้อ'},
@@ -78,7 +78,7 @@ export const AdminReviews = () => {
 
 // ── CERTIFICATES ──────────────────────────────────────────────────────────────
 export const AdminCertificates = () => {
-  const {data,loading,save,remove} = useCRUD('/certificates');
+  const {data,loading,save,remove} = useCRUD('certificates');
   const [open,setOpen]=useState(false);
   const [editing,setEditing]=useState(null);
   const [form,setForm]=useState({title:'',sort_order:'0'});
@@ -89,8 +89,8 @@ export const AdminCertificates = () => {
   const showAlert=(m,t='success')=>{setAlert({m,t});setTimeout(()=>setAlert(null),3000)};
   const openCreate=()=>{setEditing(null);setForm({title:'',sort_order:'0'});setImgFile(null);setImgPrev(null);setOpen(true)};
   const openEdit=r=>{setEditing(r);setForm({title:r.title||'',sort_order:String(r.sort_order||0)});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
-  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'/certificates');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
-  const del=async id=>{try{await remove(id,'/certificates');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
+  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'certificates');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
+  const del=async id=>{try{await remove(id,'certificates');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
   const cols=[
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt="" style={{height:60,width:'auto'}}/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'title',label:'ชื่อใบรับรอง'},
@@ -115,7 +115,7 @@ export const AdminCertificates = () => {
 
 // ── BANNERS ────────────────────────────────────────────────────────────────────
 export const AdminBanners = () => {
-  const {data,loading,remove,refetch} = useCRUD('/banners/admin/all');
+  const {data,loading,remove,refetch} = useCRUD('banners/admin/all');
   const [open,setOpen]=useState(false);
   const [editing,setEditing]=useState(null);
   const [form,setForm]=useState({title:'',subtitle:'',link_url:'',sort_order:'0',is_active:'true'});
@@ -133,7 +133,7 @@ export const AdminBanners = () => {
       Object.entries(form).forEach(([k,v])=>fd.append(k,v));
       if(imgFile)fd.append('image',imgFile);
       if(editing) await api.put(`/banners/${editing.id}`,fd,{headers:{'Content-Type':'multipart/form-data'}});
-      else await api.post('/banners',fd,{headers:{'Content-Type':'multipart/form-data'}});
+      else await api.post('banners',fd,{headers:{'Content-Type':'multipart/form-data'}});
       showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false);refetch();
     }catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}
   };
@@ -173,7 +173,7 @@ export const AdminBanners = () => {
 
 // ── BOARD MEMBERS ────────────────────────────────────────────────────────────
 export const AdminBoardMembers = () => {
-  const {data,loading,save,remove} = useCRUD('/board-members');
+  const {data,loading,save,remove} = useCRUD('board-members');
   const [open,setOpen]=useState(false);
   const [editing,setEditing]=useState(null);
   const [form,setForm]=useState({name:'',position:'',board_type:'board',sort_order:'0'});

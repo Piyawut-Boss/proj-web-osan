@@ -11,7 +11,7 @@ export default function NewsDetailPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  useEffect(() => { api.get(`/news/${id}`).then(r => setNews(r.data.data)).catch(()=>{}); }, [id]);
+  useEffect(() => { api.get(`news/${id}`).then(r => setNews(r.data.data)).catch(()=>{}); }, [id]);
   const fmtDate = d => d ? new Date(d).toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}) : '';
   if (!news) return <PublicLayout><div className="container" style={{padding:'80px 0'}}>{t('products_detail_loading')}</div></PublicLayout>;
   return (

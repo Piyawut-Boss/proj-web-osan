@@ -37,7 +37,7 @@ export default function AdminSettings() {
 
   const load = useCallback(() => {
     setLoading(true);
-    api.get('/settings/admin').then(r => {
+    api.get('settings/admin').then(r => {
       const rows = r.data.data || [];
       setAllSettings(rows);
       const fd = {};
@@ -73,7 +73,7 @@ export default function AdminSettings() {
         .filter(s => s.setting_type !== 'image')
         .forEach(s => { textFields[s.setting_key] = formData[s.setting_key] ?? ''; });
       if (Object.keys(textFields).length) {
-        await api.put('/settings/batch-update', { settings: textFields });
+        await api.put('settings/batch-update', { settings: textFields });
       }
       invalidateSettings();
       setImageFiles({});

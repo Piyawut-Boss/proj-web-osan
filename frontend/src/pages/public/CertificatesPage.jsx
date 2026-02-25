@@ -17,7 +17,7 @@ export default function CertificatesPage() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   useEffect(() => {
-    api.get('/certificates')
+    api.get('certificates')
       .then(r => {
         const data = r.data.data || [];
         if (data.length > 0) {

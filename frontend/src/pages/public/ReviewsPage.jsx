@@ -13,7 +13,7 @@ const ReviewsPage = () => {
   }, []);
 
   useEffect(() => {
-    api.get('/reviews').then(res => setReviews(res.data.data || [])).catch(() => {}).finally(() => setLoading(false));
+    api.get('reviews').then(res => setReviews(res.data.data || [])).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   return (

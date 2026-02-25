@@ -20,7 +20,7 @@ const AdminProducts = () => {
   const fetchData = () => {
     setLoading(true);
     // Fetch all products including inactive for admin
-    api.get('/products/admin/all')
+    api.get('products/admin/all')
       .then(r => setData(r.data.data || []))
       .finally(() => setLoading(false));
   };
@@ -70,7 +70,7 @@ const AdminProducts = () => {
       if (editing) {
         await api.put(`/products/${editing.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        await api.post('/products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post('products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       showAlert(editing ? 'อัปเดตผลิตภัณฑ์สำเร็จ ✓' : 'เพิ่มผลิตภัณฑ์สำเร็จ ✓');
       setModalOpen(false);

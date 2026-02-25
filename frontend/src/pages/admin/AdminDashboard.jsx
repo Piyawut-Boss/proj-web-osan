@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
-    api.get('/banners/admin/dashboard')
+    api.get('banners/admin/dashboard')
       .then(res => setStats(res.data.data))
       .catch(() => {})
       .finally(() => setLoading(false));

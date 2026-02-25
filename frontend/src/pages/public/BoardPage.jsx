@@ -15,7 +15,7 @@ export default function BoardPage() {
   }, []);
 
   useEffect(() => {
-    api.get('/board-members')
+    api.get('board-members')
       .then(r => {
         const members = Array.isArray(r.data?.data) ? r.data.data : [];
         setBoardMembers(members);
