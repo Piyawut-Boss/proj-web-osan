@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Display Test - PSU Agro Food</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 1.1em;
+    }
+
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .section h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .image-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .image-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+    }
+
+    .image-container {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .image-info {
+      padding: 15px;
+    }
+
+    .image-name {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+      word-wrap: break-word;
+    }
+
+    .image-url {
+      font-size: 0.75em;
+      color: #666;
+      word-break: break-all;
+      font-family: monospace;
+      background: #f0f0f0;
+      padding: 5px;
+      border-radius: 3px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 0.75em;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .status-ok {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-loading {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .summary {
+      background: #ecf0f1;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    .summary-stat {
+      display: inline-block;
+      margin-right: 30px;
+      font-size: 1.1em;
+    }
+
+    .summary-stat strong {
+      color: #667eea;
+    }
+
+    .loading {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .error-icon {
+      font-size: 3em;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🖼️ IMAGE DISPLAY TEST</h1>
+    <div class="subtitle">PSU Agro Food Database Images - Live Display Verification</div>
+
+    <div id="content">
+      <!-- Images will be loaded here -->
+    </div>
+
+    <div class="section">
+      <h2>📊 Test Summary</h2>
+      <div class="summary">
+        <div class="summary-stat">Total Images: <strong id="total">0</strong></div>
+        <div class="summary-stat">✅ Loaded: <strong id="loaded" style="color: green;">0</strong></div>
+        <div class="summary-stat">❌ Failed: <strong id="failed" style="color: red;">0</strong></div>
+        <div class="summary-stat">⏳ Loading: <strong id="loading" style="color: orange;">0</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+    const stats = { total: 0, loaded: 0, failed: 0, loading: 0 };
+
+    async function init() {
+      try {
+        // Login
+        const loginRes = await fetch(`${API}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'admin', password: 'admin123' })
+        });
+        const { token } = await loginRes.json();
+
+        // Load different image types
+        await loadImages('Products', 'products', 'Products', token);
+        await loadImages('Certificates', 'certificates', 'Certificates', token);
+        await loadImages('Board Members', 'board-members', 'Board Members', token);
+        await loadImages('Banners', 'banners', 'Banners', token);
+
+      } catch (err) {
+        document.getElementById('content').innerHTML += `<div class="section"><p style="color: red;">Error: ${err.message}</p></div>`;
+      }
+    }
+
+    async function loadImages(title, endpoint, displayName, token) {
+      try {
+        const res = await fetch(`${API}/${endpoint}/admin/all`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        let html = `<div class="section"><h2>${title}</h2><div class="image-grid">`;
+
+        if (data.data && data.data.length > 0) {
+          data.data.forEach(item => {
+            const name = item.name || item.title;
+            const image = item.image;
+
+            stats.total++;
+            stats.loading++;
+            updateStats();
+
+            let card = `
+              <div class="image-card">
+                <div class="image-container" id="container-${stats.total}">
+                  <div class="loading" style="font-size: 2em;">⏳</div>
+                </div>
+                <div class="image-info">
+                  <div class="image-name">${name}</div>
+                  <div class="image-url">${image || 'No image'}</div>
+                  <div class="status-badge status-loading" id="status-${stats.total}">Loading...</div>
+                </div>
+              </div>
+            `;
+            html += card;
+
+            // Load image
+            if (image) {
+              const img = new Image();
+              const cardId = stats.total;
+              img.onload = () => {
+                document.getElementById(`container-${cardId}`).innerHTML = '';
+                document.getElementById(`container-${cardId}`).appendChild(img);
+                document.getElementById(`status-${cardId}`).textContent = '✅ Loaded';
+                document.getElementById(`status-${cardId}`).className = 'status-badge status-ok';
+                stats.loaded++;
+                stats.loading--;
+                updateStats();
+              };
+              img.onerror = () => {
+                document.getElementById(`container-${cardId}`).innerHTML = '<div class="error-icon">❌</div>';
+                document.getElementById(`status-${cardId}`).textContent = '❌ Failed';
+                document.getElementById(`status-${cardId}`).className = 'status-badge status-error';
+                stats.failed++;
+                stats.loading--;
+                updateStats();
+              };
+              img.src = image;
+            }
+          });
+        }
+
+        html += `</div></div>`;
+        document.getElementById('content').innerHTML += html;
+
+      } catch (err) {
+        console.error(`Error loading ${displayName}:`, err);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('total').textContent = stats.total;
+      document.getElementById('loaded').textContent = stats.loaded;
+      document.getElementById('failed').textContent = stats.failed;
+      document.getElementById('loading').textContent = stats.loading;
+    }
+
+    // Start loading when page is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
