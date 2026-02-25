@@ -170,7 +170,7 @@ export default function ProductsPage() {
                       <p><strong>เบอร์ติดต่อ</strong>      097-125-8615</p>
                       <p><strong>Email</strong>            psuagrofood.factory@gmail.com</p>
                     </div>
-                    <p className="pp-oem-tagline">"{getLines('oem_tagline','เรามีทีมงาน วิจัยและพัฒนา สูตรผลิตภัณฑ์ตามที่ต้องการ').map((l,i) => <span key={i}>{l}<br/></span>)}"</p>
+                    <p className="pp-oem-tagline">"{get('oem_tagline','เรามีทีมงาน วิจัยและพัฒนา สูตรผลิตภัณฑ์ตามที่ต้องการ')}"</p>
                   </div>
                 </div>
               </div>
