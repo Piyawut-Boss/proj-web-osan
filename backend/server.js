@@ -7,14 +7,6 @@ const fs      = require('fs');
 const app = express();
 const IS_PROD = process.env.NODE_ENV === 'production';
 
-// ── Auto-init SQLite on first run ────────────────────────────────────────────
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'database.sqlite');
-if (!fs.existsSync(DB_PATH)) {
-  console.log('🔧 No database found — running first-time setup...');
-  // Skip auto-init for now to avoid better-sqlite3 dependency
-  // require('./init-db');
-}
-
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173,http://localhost:5174')
   .split(',').map(s => s.trim());
@@ -72,7 +64,7 @@ app.post('/api/init', async (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', db: 'SQLite', env: process.env.NODE_ENV || 'development' });
+  res.json({ status: 'OK', db: 'MySQL', env: process.env.NODE_ENV || 'development' });
 });
 
 // ── SPA fallback (production only) ──────────────────────────────────────────
@@ -95,5 +87,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ PSU Agro Food API on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
-  console.log(`📁 SQLite: ${DB_PATH}`);
+  console.log(`📁 MySQL: ${process.env.DB_NAME || 'psu_agro_food'} @ ${process.env.DB_HOST || 'localhost'}`);
 });

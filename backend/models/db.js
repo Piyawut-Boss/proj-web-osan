@@ -1,86 +1,71 @@
-const initSqlJs = require('sql.js');
-const fs = require('fs');
-const path = require('path');
+const mysql = require('mysql2/promise');
+require('dotenv').config();
 
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'database.sqlite');
+// Connection pool for MySQL
+let pool;
 
-let SQL;
-let _db;
-
-const initDb = async () => {
-  if (_db) return _db;
+const initPool = async () => {
+  if (pool) return pool;
   
-  // Initialize sql.js
-  SQL = await initSqlJs();
-  
-  // Load existing database or create new one
-  let buffer;
-  if (fs.existsSync(DB_PATH)) {
-    buffer = fs.readFileSync(DB_PATH);
-  }
-  
-  _db = new SQL.Database(buffer);
-  _db.run('PRAGMA journal_mode = WAL');
-  _db.run('PRAGMA foreign_keys = ON');
-  console.log('✅ SQLite connected:', DB_PATH);
-  
-  return _db;
-};
-
-const saveDb = () => {
-  if (_db) {
-    const data = _db.export();
-    const buffer = Buffer.from(data);
-    fs.writeFileSync(DB_PATH, buffer);
+  try {
+    pool = mysql.createPool({
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'psu_agro_food',
+      port: process.env.DB_PORT || 3306,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+      enableKeepAlive: true,
+      keepAliveInitialDelayMs: 0,
+    });
+    
+    console.log('✅ MySQL connected:', process.env.DB_NAME || 'psu_agro_food');
+    return pool;
+  } catch (error) {
+    console.error('❌ MySQL connection failed:', error.message);
+    throw error;
   }
 };
-
-// Auto-save on process exit
-process.on('exit', saveDb);
-process.on('SIGINT', () => {
-  saveDb();
-  process.exit(0);
-});
 
 const db = {
   execute: async (sql, params = []) => {
-    const d = await initDb();
-    const upper = sql.trim().toUpperCase();
-    
     try {
-      if (upper.startsWith('SELECT')) {
-        const stmt = d.prepare(sql);
-        stmt.bind(params);
-        const rows = [];
-        while (stmt.step()) {
-          rows.push(stmt.getAsObject());
+      const p = await initPool();
+      const connection = await p.getConnection();
+      
+      try {
+        const [results] = await connection.execute(sql, params);
+        
+        // For INSERT queries, get the insert ID
+        if (sql.trim().toUpperCase().startsWith('INSERT')) {
+          return [{ insertId: results.insertId, affectedRows: results.affectedRows }];
         }
-        stmt.free();
-        return [rows];
-      } else {
-        d.run(sql, params);
-        saveDb();
-        // For INSERT statements, try to get last insert ID
-        let insertId = 0;
-        try {
-          const lastIdStmt = d.prepare('SELECT last_insert_rowid() as id');
-          if (lastIdStmt.step()) {
-            insertId = lastIdStmt.getAsObject().id;
-          }
-          lastIdStmt.free();
-        } catch (e) {
-          // Ignore
+        
+        // For SELECT queries, return the rows directly
+        if (sql.trim().toUpperCase().startsWith('SELECT')) {
+          return [results];
         }
-        return [{ insertId, affectedRows: 1 }];
+        
+        // For UPDATE/DELETE, return affected rows
+        return [{ affectedRows: results.affectedRows }];
+      } finally {
+        connection.release();
       }
     } catch (error) {
-      console.error('Database error:', error);
+      console.error('Database error:', error.message);
       throw error;
     }
   },
+
   raw: async () => {
-    return await initDb();
+    return await initPool();
   },
+
+  close: async () => {
+    if (pool) await pool.end();
+  }
 };
 
 module.exports = db;
