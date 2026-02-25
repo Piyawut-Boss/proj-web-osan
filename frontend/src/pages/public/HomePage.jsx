@@ -6,6 +6,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import api from '../../utils/api';
 import './HomePage.css';
 
+const BASE_URL = "http://localhost:5000"; // 🔥 เปลี่ยนเป็น domain จริงตอน deploy
+
 export default function HomePage() {
   const { get, getLines } = useSettings();
   const { t, lang } = useLanguage();
@@ -43,7 +45,23 @@ export default function HomePage() {
   };
 
   const phone = get('contact_phone', '062-163-9888').split(',')[0].trim();
-  const psuBlen = products.filter(p => p.category === 'psu_blen');
+
+  // 🔥 FIX PSU BLEN IMAGE (ใช้ path ตรงจาก backend)
+  const psuBlen = [
+    {
+      image: `${BASE_URL}/uploads/products/PSUBLen/PSUBLen1.jpg`,
+      name: 'PSU Blen 1'
+    },
+    {
+      image: `${BASE_URL}/uploads/products/PSUBLen/PSUBLen2.jpg`,
+      name: 'PSU Blen 2'
+    },
+    {
+      image: `${BASE_URL}/uploads/products/PSUBLen/PSUBLen3.jpg`,
+      name: 'PSU Blen 3'
+    }
+  ];
+
   const catLabel = c => ({ psu_blen: 'PSU Blen', meal_box: 'Meal Box', oem: 'OEM' })[c] || c;
 
   const accItems = [
@@ -61,18 +79,26 @@ export default function HomePage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="hp-hero">
-        <img src={heroBg} alt="PSU AGRO FOOD" className="hp-hero-full-img"
-          onError={e => { e.target.style.display = 'none'; }} />
+        <img
+          src={heroBg}
+          alt="PSU AGRO FOOD"
+          className="hp-hero-full-img"
+          onError={e => { e.target.style.display = 'none'; }}
+        />
         {banners.length > 1 && (
           <div className="hp-dots">
             {banners.map((_, i) => (
-              <button key={i} className={`hp-dot${i === idx ? ' active' : ''}`} onClick={() => setIdx(i)} />
+              <button
+                key={i}
+                className={`hp-dot${i === idx ? ' active' : ''}`}
+                onClick={() => setIdx(i)}
+              />
             ))}
           </div>
         )}
       </section>
 
-      
+      {/* ── PSU BLEN ─────────────────────────────────────────────────── */}
       <section className="hp-showcase">
         <div className="container hp-showcase-grid">
           <div className="hp-sc-info">
@@ -87,14 +113,20 @@ export default function HomePage() {
               <a href={`tel:${phone.replace(/-/g,'')}`} className="hp-sc-btn hp-sc-tel">{t('tel')} : {phone}</a>
             </div>
           </div>
+
           <div className="hp-sc-imgs">
             <div className="hp-sc-main">
-              {psuBlen[0]?.image ? <img src={psuBlen[0].image} alt={getProductName(psuBlen[0])} /> : <div className="hp-img-ph">🥛</div>}
+              {psuBlen[0]?.image
+                ? <img src={psuBlen[0].image} alt={psuBlen[0].name} />
+                : <div className="hp-img-ph">🥛</div>}
             </div>
+
             <div className="hp-sc-side">
               {[psuBlen[1], psuBlen[2]].map((p, i) => (
                 <div key={i} className="hp-sc-small">
-                  {p?.image ? <img src={p.image} alt={getProductName(p)} /> : <div className="hp-img-ph sm">🥛</div>}
+                  {p?.image
+                    ? <img src={p.image} alt={p.name} />
+                    : <div className="hp-img-ph sm">🥛</div>}
                 </div>
               ))}
             </div>
@@ -106,10 +138,18 @@ export default function HomePage() {
       <section className="hp-mealbox">
         <div className="container hp-mb-grid">
           <div className="hp-mb-left">
-            {get('mealbox_image') ? <img src={get('mealbox_image')} alt="meal box" className="hp-mb-img"/> : <div className="hp-img-ph lg">🍱</div>}
+            <img
+              src={`${BASE_URL}/uploads/products/MealBox/MealBox.png`}
+              alt="meal box"
+              className="hp-mb-img"
+            />
           </div>
+
           <div className="hp-mb-right">
-            <div className="hp-mb-brand">ᴾˢᵁ AGRO FOOD<br/><small>PSU AGRO FOOD CO., LTD.</small></div>
+            <div className="hp-mb-brand">
+              ᴾˢᵁ AGRO FOOD<br/>
+              <small>PSU AGRO FOOD CO., LTD.</small>
+            </div>
             <h2 className="hp-mb-title">{get('mealbox_title','อาหารกล่องพร้อมทาน')}</h2>
             <p className="hp-mb-en">{get('mealbox_subtitle','Ready-to-Eat Meal Box')}</p>
             <div className="hp-mb-desc">
@@ -127,58 +167,23 @@ export default function HomePage() {
           <h2 className="section-title hp-why-title">{t('accordion_section_title')}</h2>
           <div className="hp-accordion">
             {accItems.map((item, i) => (
-              <div key={i} className={`hp-acc-item${acc === i ? ' open' : ''}`} onClick={() => setAcc(acc === i ? -1 : i)}>
-                <div className="hp-acc-head"><span>{item.title}</span><span className="hp-acc-arr">▾</span></div>
-                <div className="hp-acc-body"><p>{item.body}</p></div>
+              <div
+                key={i}
+                className={`hp-acc-item${acc === i ? ' open' : ''}`}
+                onClick={() => setAcc(acc === i ? -1 : i)}
+              >
+                <div className="hp-acc-head">
+                  <span>{item.title}</span>
+                  <span className="hp-acc-arr">▾</span>
+                </div>
+                <div className="hp-acc-body">
+                  <p>{item.body}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* ── TODAY ────────────────────────────────────────────────────── */}
-      <section className="hp-today">
-        {get('today_image') && <img src={get('today_image')} alt="" className="hp-today-bg"/>}
-        <div className="hp-today-ov"/>
-        <div className="container hp-today-inner">
-          <p className="hp-today-label">{t('today_section_label')}</p>
-          <h2 className="hp-today-th">
-            <span>{t('today_headline_line1')}<br/></span>
-            <span>{t('today_headline_line2')}<br/></span>
-          </h2>
-          <p className="hp-today-en">{t('today_headline_en')}</p>
-          <Link to="/about" className="btn btn-accent" style={{marginTop:24}}>{t('home_read_more')}</Link>
-        </div>
-      </section>
-
-      {/* ── PRODUCTS ─────────────────────────────────────────────────── */}
-      {products.length > 0 && (
-        <>
-          {/* Recommended Products Preview */}
-          <section className="section hp-recommended">
-            <div className="container">
-              <h2 className="section-title">{t('recommended_products') || 'สินค้าแนะนำ'}</h2>
-              <div className="hp-rec-grid">
-                {products.slice(0, 3).map(p => (
-                  <Link key={p.id} to={`/products/${p.id}`} className="hp-rec-card">
-                    <div className="hp-rec-img">
-                      {p.image ? <img src={p.image} alt={getProductName(p)}/> : <div className="hp-img-ph lg">📦</div>}
-                    </div>
-                    <div className="hp-rec-body">
-                      <h3>{getProductName(p)}</h3>
-                      {p.name_en && <p className="hp-rec-en">{p.name_en}</p>}
-                      {p.weight && <p className="hp-rec-wt">⚖️ {p.weight}</p>}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <div style={{textAlign:'center',marginTop:40}}>
-                <Link to="/products" className="btn btn-primary">{t('home_view_all')}</Link>
-              </div>
-            </div>
-          </section>
-        </>
-      )}
 
     </PublicLayout>
   );
