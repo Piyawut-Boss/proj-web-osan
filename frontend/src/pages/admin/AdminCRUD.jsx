@@ -89,8 +89,8 @@ export const AdminCertificates = () => {
   const showAlert=(m,t='success')=>{setAlert({m,t});setTimeout(()=>setAlert(null),3000)};
   const openCreate=()=>{setEditing(null);setForm({title:'',sort_order:'0'});setImgFile(null);setImgPrev(null);setOpen(true)};
   const openEdit=r=>{setEditing(r);setForm({title:r.title||'',sort_order:String(r.sort_order||0)});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
-  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'/reviews');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
-  const del=async id=>{try{await remove(id,'/reviews');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
+  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'/certificates');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
+  const del=async id=>{try{await remove(id,'/certificates');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
   const cols=[
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt="" style={{height:60,width:'auto'}}/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'title',label:'ชื่อใบรับรอง'},
