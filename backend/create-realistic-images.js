@@ -138,6 +138,10 @@ async function createRealisticImages() {
     { name: 'garlic-chicken.png', title: 'Garlic Chicken', color: [211, 84, 0] }, // Dark orange
     { name: 'spicy-catfish.png', title: 'Spicy Catfish', color: [192, 57, 43] }, // Red
     { name: 'green-curry.png', title: 'Green Curry', color: [46, 204, 113] }, // Green
+    { name: 'oem-custom-blended.png', title: 'OEM Custom Blended', color: [155, 89, 182] }, // Purple
+    { name: 'oem-sauces.png', title: 'OEM Sauces', color: [231, 76, 60] }, // Dark red
+    { name: 'oem-beverages.png', title: 'OEM Beverages', color: [52, 73, 94] }, // Dark blue-gray
+    { name: 'oem-health-products.png', title: 'OEM Health Products', color: [16, 112, 2] }, // Dark green
   ];
 
   console.log('📦 Creating Product Images...');
