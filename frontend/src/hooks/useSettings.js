@@ -11,7 +11,7 @@ export const useSettings = () => {
 
   useEffect(() => {
     if (_cache) { setSettings(_cache); setLoading(false); return; }
-    if (!_promise) _promise = api.get('/settings').then(r => { _cache = r.data.data || {}; return _cache; }).catch(() => ({}));
+    if (!_promise) _promise = api.get('settings').then(r => { _cache = r.data.data || {}; return _cache; }).catch(() => ({}));
     _promise.then(d => { setSettings(d); setLoading(false); });
   }, []);
 
