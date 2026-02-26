@@ -7,13 +7,13 @@
 .banner-dot.active { background:#fff; width:24px; border-radius:5px; }
 .banner-dot:hover { background:rgba(255,255,255,0.9); }
 
-.pp-hero { position:relative;background:linear-gradient(135deg,#0a1748 0%,#1f3c88 60%,#2a5298 100%);padding:72px 0;overflow:hidden; }
-.pp-hero-overlay { position:absolute;inset:0;background:rgba(10,23,72,.5); }
+.pp-hero { position:relative;background:#d6e8f8;padding:72px 0;overflow:hidden; }
+.pp-hero-overlay { position:absolute;inset:0;background:transparent; }
 .pp-hero-body { position:relative;z-index:2;text-align:center; }
-.pp-hero-body h1 { font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:#fff;margin-bottom:10px; }
-.pp-hero-body p { font-size:1rem;color:rgba(255,255,255,.7);margin-bottom:24px; }
+.pp-hero-body h1 { font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:var(--primary);margin-bottom:10px; }
+.pp-hero-body p { font-size:1rem;color:var(--text-medium);margin-bottom:24px; }
 .pp-hero-cats { display:flex;justify-content:center;gap:16px;flex-wrap:wrap; }
-.pp-hero-cat { background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:8px 20px;border-radius:30px;font-size:.85rem; }
+.pp-hero-cat { background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.12);color:var(--text-dark);padding:8px 20px;border-radius:30px;font-size:.85rem; }
 
 .pp-filter-row { display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px; }
 .pp-cats { display:flex;gap:8px;flex-wrap:wrap; }
