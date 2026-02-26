@@ -23,7 +23,7 @@
 
 .pp-group { margin-bottom:48px;border:1px solid var(--border);border-radius:14px;overflow:hidden; }
 .pp-group-header { display:flex;align-items:flex-start;gap:20px;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff); }
-.pp-mb-header { background:linear-gradient(135deg,#e8f8ee,#d0f0e0); }
+.pp-mb-header { background:linear-gradient(135deg,#f0f4ff,#e8f0ff); }
 .pp-group-icon { font-size:2.5rem;flex-shrink:0;width:140px;height:160px;border-radius:10px;overflow:hidden;background:#f0f4ff;display:flex;align-items:center;justify-content:center; }
 .pp-mb-header .pp-group-icon { background:transparent; }
 .pp-group-icon img { width:100%;height:100%;object-fit:contain;padding:0; }
