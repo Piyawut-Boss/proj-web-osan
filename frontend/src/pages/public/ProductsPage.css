@@ -26,7 +26,7 @@
 .pp-product-row { display:flex;align-items:center;gap:20px;padding:20px 28px;border-bottom:1px solid var(--border);text-decoration:none;transition:background .15s;cursor:pointer; }
 .pp-product-row:last-child { border-bottom:none; }
 .pp-product-row:hover { background:#f8faff; }
-.pp-prod-img { width:90px;height:90px;border-radius:10px;overflow:hidden;background:#f0f4ff;flex-shrink:0; }
+.pp-prod-img { width:90px;height:90px;border-radius:10px;overflow:hidden;background:transparent;flex-shrink:0; }
 .pp-prod-img img { width:100%;height:100%;object-fit:contain;padding:0; }
 .pp-img-ph { width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(135deg,#e0eaff,#d0daff); }
 .pp-img-ph.lg { width:260px;height:200px;font-size:5rem;border-radius:12px; }
