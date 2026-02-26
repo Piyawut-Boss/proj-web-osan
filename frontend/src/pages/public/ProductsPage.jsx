@@ -54,8 +54,8 @@ export default function ProductsPage() {
           <h1>{t('home_hero_title') || 'นวัตกรรมอาหารจากมหาวิทยาลัยสงขลานครินทร์'}</h1>
           <p>{t('home_hero_tagline') || 'สร้างคุณภาพชีวิตของทุกคนที่ดีกว่า'}</p>
           <div className="pp-hero-cats">
-            <div className="pp-hero-cat">🥛 {t('products_psu_blen_desc') || 'อาหารปั่นเหลวพร้อมทาน'}</div>
-            <div className="pp-hero-cat">🍱 {t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</div>
+            <div className="pp-hero-cat">{get('showcase_image') ? <img src={getImageUrl(get('showcase_image'))} alt="PSU Blen" style={{height:'24px',width:'auto'}} /> : '🥛'} {t('products_psu_blen_desc') || 'อาหารปั่นเหลวพร้อมทาน'}</div>
+            <div className="pp-hero-cat">{get('mealbox_image') ? <img src={getImageUrl(get('mealbox_image'))} alt="Meal Box" style={{height:'24px',width:'auto'}} /> : '🍱'} {t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</div>
             <div className="pp-hero-cat">🏭 {t('products_oem_label') || 'บริการ OEM สินค้าครบวงจร'}</div>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function ProductsPage() {
           {(cat==='all' || cat==='psu_blen') && (
             <div className="pp-group">
               <div className="pp-group-header">
-                <div className="pp-group-icon">🥛</div>
+                <div className="pp-group-icon">{get('showcase_image') ? <img src={getImageUrl(get('showcase_image'))} alt="PSU Blen" style={{width:'100%',height:'100%',objectFit:'contain'}} /> : '🥛'}</div>
                 <div>
                   <h3>{t('products_psu_blen_title') || 'PSU Blen'} <span>{t('products_psu_blen_label') || 'พีเอสยู เบลน'}</span></h3>
                   <p>{t('products_psu_blen_desc') || 'อาหารปั่นเหลวพร้อมทาน สูตรผสมเนื้อไก่'}<br/>{t('products_psu_blen_en') || 'Blenderized Diet Chicken Protein'}</p>
@@ -112,7 +112,7 @@ export default function ProductsPage() {
           {(cat==='all' || cat==='meal_box') && (
             <div className="pp-group">
               <div className="pp-group-header pp-mb-header">
-                <div className="pp-group-icon">🍱</div>
+                <div className="pp-group-icon">{get('mealbox_image') ? <img src={getImageUrl(get('mealbox_image'))} alt="Meal Box" style={{width:'100%',height:'100%',objectFit:'contain'}} /> : '🍱'}</div>
                 <div>
                   <h3>{t('products_meal_box_title') || 'Crab Agro'} <span>{t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</span></h3>
                   <p>{t('products_meal_box_desc') || 'อร่อย สะดวก เก็บรักษานาน 18 เดือนที่อุณหภูมิห้อง'}<br/>{t('products_meal_box_en') || 'Delicious, Convenient and 18 months shelf life at room temperature.'}</p>

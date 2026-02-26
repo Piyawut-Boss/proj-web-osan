@@ -16,6 +16,7 @@ const allSettings = [
   // SHOWCASE
   {key:'showcase_title_th',val:'PSU Blen อาหารปั่นเหลวพร้อมทาน',type:'text',label:'Showcase หัวข้อบรรทัด 1',section:'showcase'},
   {key:'showcase_title_th2',val:'สูตรผสมเนื้อไก่',type:'text',label:'Showcase หัวข้อบรรทัด 2',section:'showcase'},
+  {key:'showcase_image',val:'',type:'image',label:'รูปภาพ Showcase',section:'showcase'},
   
   // MEALBOX
   {key:'mealbox_image',val:'',type:'image',label:'รูปอาหารกล่อง',section:'mealbox'},
