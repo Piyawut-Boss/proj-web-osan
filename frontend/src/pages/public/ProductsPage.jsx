@@ -71,7 +71,6 @@ export default function ProductsPage() {
               src={getImageUrl(carouselImages[carouselIdx].image_path)}
               alt="Products Banner"
               className="pp-banner-img"
-              key={carouselImages[carouselIdx].id}
             />
             {carouselImages.length > 1 && (
               <div className="banner-carousel-dots">
