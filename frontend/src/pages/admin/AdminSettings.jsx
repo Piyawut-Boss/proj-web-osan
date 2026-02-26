@@ -10,6 +10,7 @@ const SECTIONS = [
   { key:'accordion', label:'❓ Why PSU Blend' },
   { key:'today', label:'📰 PSU Agro Food Today' },
   { key:'oem', label:'🏭 บริการ OEM' },
+  { key:'products', label:'📦 Products Page Banner' },
   { key:'vision', label:'🎯 วิสัยทัศน์' },
   { key:'mission', label:'🤝 พันธกิจ' },
   { key:'core_values', label:'💎 ค่านิยม' },
