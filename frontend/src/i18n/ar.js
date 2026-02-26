@@ -35,7 +35,7 @@ const ar = {
   products_psu_blen_label: 'PSU Blen',
   products_psu_blen_desc: 'غذاء مخلوط جاهز للأكل صيغة بروتين الدجاج المركبة',
   products_psu_blen_en: 'Blenderized Diet Chicken Protein',
-  products_meal_box_title: 'Crab Agro',
+  products_meal_box_title: 'Grab Agro',
   products_meal_box_label: 'صندوق وجبة خفيفة',
   products_meal_box_desc: 'لذيذة وسهلة الاستخدام وتحتفظ بالجودة لمدة 18 شهرًا في درجة حرارة الغرفة.',
   products_meal_box_en: 'Delicious, Convenient and 18 months shelf life at room temperature.',

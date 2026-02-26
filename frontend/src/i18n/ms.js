@@ -38,7 +38,7 @@ const ms = {
   products_psu_blen_label: 'PSU Blen',
   products_psu_blen_desc: 'Makanan Bercampuran Siap Makan Formula Campuran Protein Ayam',
   products_psu_blen_en: 'Blenderized Diet Chicken Protein',
-  products_meal_box_title: 'Crab Agro',
+  products_meal_box_title: 'Grab Agro',
   products_meal_box_label: 'Kotak Makanan',
   products_meal_box_desc: 'Sedap, Mudah dan hayat simpan 18 bulan pada suhu bilik.',
   products_meal_box_en: 'Delicious, Convenient and 18 months shelf life at room temperature.',

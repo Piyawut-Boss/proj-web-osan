@@ -146,7 +146,7 @@ export default function ProductsPage() {
               <div className="pp-group-header pp-mb-header">
                 <div className="pp-group-icon">{get('mealbox_image') ? <img src={getImageUrl(get('mealbox_image'))} alt="Meal Box"/> : '🍱'}</div>
                 <div>
-                  <h3>{t('products_meal_box_title') || 'Crab Agro'} <span>{t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</span></h3>
+                  <h3>{t('products_meal_box_title') || 'Grab Agro'} <span>{t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</span></h3>
                   <p>{t('products_meal_box_desc') || 'อร่อย สะดวก เก็บรักษานาน 18 เดือนที่อุณหภูมิห้อง'}<br/>{t('products_meal_box_en') || 'Delicious, Convenient and 18 months shelf life at room temperature.'}</p>
                 </div>
               </div>

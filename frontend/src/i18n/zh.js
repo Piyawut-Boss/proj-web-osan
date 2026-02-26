@@ -35,7 +35,7 @@ const zh = {
   products_psu_blen_label: 'PSU Blen',
   products_psu_blen_desc: '混合液体饮食即食产品 鸡肉蛋白混合配方',
   products_psu_blen_en: 'Blenderized Diet Chicken Protein',
-  products_meal_box_title: 'Crab Agro',
+  products_meal_box_title: 'Grab Agro',
   products_meal_box_label: '便当盒',
   products_meal_box_desc: '美味、方便、在室温下可保存18个月。',
   products_meal_box_en: 'Delicious, Convenient and 18 months shelf life at room temperature.',

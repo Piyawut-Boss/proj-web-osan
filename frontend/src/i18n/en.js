@@ -38,7 +38,7 @@ const en = {
   products_psu_blen_label: 'PSU Blen',
   products_psu_blen_desc: 'Blenderized Diet Ready-to-Eat Mixed Formula Chicken Protein',
   products_psu_blen_en: 'Blenderized Diet Chicken Protein',
-  products_meal_box_title: 'Crab Agro',
+  products_meal_box_title: 'Grab Agro',
   products_meal_box_label: 'Meal Box',
   products_meal_box_desc: 'Delicious, Convenient and 18 months shelf life at room temperature.',
   products_meal_box_en: 'Delicious, Convenient and 18 months shelf life at room temperature.',

@@ -38,7 +38,7 @@ const th = {
   products_psu_blen_label: 'พีเอสยู เบลน',
   products_psu_blen_desc: 'อาหารปั่นเหลวพร้อมทาน สูตรผสมเนื้อไก่',
   products_psu_blen_en: 'Blenderized Diet Chicken Protein',
-  products_meal_box_title: 'Crab Agro',
+  products_meal_box_title: 'Grab Agro',
   products_meal_box_label: 'อาหารกล่องพร้อมทาน',
   products_meal_box_desc: 'อร่อย สะดวก เก็บรักษานาน 18 เดือนที่อุณหภูมิห้อง',
   products_meal_box_en: 'Delicious, Convenient and 18 months shelf life at room temperature.',
