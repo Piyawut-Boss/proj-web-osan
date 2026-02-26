@@ -23,7 +23,10 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const url = req.originalUrl;
     let folder = 'uploads';
-    if (url.includes('/products'))     folder = 'uploads/products';
+    // Carousel images save to root uploads/ (check first before other routes)
+    if (url.includes('/carousel')) {
+      folder = 'uploads';
+    } else if (url.includes('/products'))     folder = 'uploads/products';
     else if (url.includes('/news'))    folder = 'uploads/news';
     else if (url.includes('/reviews')) folder = 'uploads/reviews';
     else if (url.includes('/certificates')) folder = 'uploads/certificates';
