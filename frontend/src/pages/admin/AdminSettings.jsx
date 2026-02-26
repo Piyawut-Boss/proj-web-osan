@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../utils/api';
+import CarouselManager from '../../components/admin/CarouselManager';
 import { invalidateSettings } from '../../hooks/useSettings';
 import './AdminPages.css';
 
@@ -113,6 +114,16 @@ export default function AdminSettings() {
         {/* Form */}
         <div className="settings-form">
           <h2 className="settings-section-title">{SECTIONS.find(s=>s.key===activeSection)?.label}</h2>
+          
+          {/* CAROUSEL MANAGER FOR HERO AND PRODUCTS */}
+          {['hero', 'products'].includes(activeSection) && (
+            <CarouselManager 
+              section={activeSection}
+              label={activeSection === 'hero' ? '🎬 Slide Banner' : '📸 Slide Banner'}
+              onAlert={showAlert}
+            />
+          )}
+
           {sectionSettings.length === 0 && <p style={{color:'var(--text-light)'}}>ไม่มีการตั้งค่าในส่วนนี้</p>}
           {(() => {
             const filtered = sectionSettings.filter(s => {

@@ -12,12 +12,28 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [cat, setCat] = useState('all');
   const [search, setSearch] = useState('');
+  const [carouselImages, setCarouselImages] = useState([]);
+  const [carouselIdx, setCarouselIdx] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => { api.get('products').then(r => setProducts(r.data.data || [])).catch(() => {}); }, []);
+
+  // Load carousel images for products page banner
+  useEffect(() => {
+    api.get('carousel/products')
+      .then(r => {
+        const images = r.data.data || [];
+        setCarouselImages(images);
+        if (images.length > 1) {
+          const timer = setInterval(() => setCarouselIdx(i => (i + 1) % images.length), 5000);
+          return () => clearInterval(timer);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Get product name in current language
   const getProductName = (product) => {
@@ -49,7 +65,28 @@ export default function ProductsPage() {
 
       {/* PRODUCTS PAGE BANNER */}
       <section className="pp-banner">
-        {get('products_banner_image') ? (
+        {carouselImages.length > 0 ? (
+          <>
+            <img
+              src={getImageUrl(carouselImages[carouselIdx].image_path)}
+              alt="Products Banner"
+              className="pp-banner-img"
+              key={carouselImages[carouselIdx].id}
+            />
+            {carouselImages.length > 1 && (
+              <div className="banner-carousel-dots">
+                {carouselImages.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`banner-dot${i === carouselIdx ? ' active' : ''}`}
+                    onClick={() => setCarouselIdx(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : get('products_banner_image') ? (
           <img src={getImageUrl(get('products_banner_image'))} alt="Products Banner" className="pp-banner-img"/>
         ) : (
           <div className="pp-banner-placeholder">📦 Products Page Banner</div>

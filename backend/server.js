@@ -72,6 +72,7 @@ app.use('/api/reviews',       require('./routes/reviews'));
 app.use('/api/certificates',  require('./routes/certificates'));
 app.use('/api/board-members', require('./routes/boardMembers'));
 app.use('/api/banners',       require('./routes/banners'));
+app.use('/api/carousel',      require('./routes/carousel'));
 app.use('/api/settings',      require('./routes/settings'));
 app.use('/api/products-home-images', require('./routes/productsHome'));
 

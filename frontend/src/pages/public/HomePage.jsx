@@ -11,6 +11,7 @@ export default function HomePage() {
   const { t, lang } = useLanguage();
   const [products, setProducts] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [heroCarouselImages, setHeroCarouselImages] = useState([]);
   const [homeImages, setHomeImages] = useState([]);
   const [mainImgIdx, setMainImgIdx] = useState(0);
   const [idx, setIdx] = useState(0);
@@ -24,15 +25,18 @@ export default function HomePage() {
   useEffect(() => {
     api.get('products').then(r => setProducts(r.data.data || [])).catch(() => {});
     api.get('banners').then(r => setBanners(r.data.data || [])).catch(() => {});
+    api.get('carousel/hero').then(r => setHeroCarouselImages(r.data.data || [])).catch(() => {});
     api.get('products-home-images').then(r => setHomeImages(r.data.data || [])).catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (banners.length > 1) {
-      const timer = setInterval(() => setIdx(i => (i + 1) % banners.length), 5000);
+    // Use hero carousel images if available, otherwise use banners
+    const imagesToUse = heroCarouselImages.length > 0 ? heroCarouselImages : banners;
+    if (imagesToUse.length > 1) {
+      const timer = setInterval(() => setIdx(i => (i + 1) % imagesToUse.length), 5000);
       return () => clearInterval(timer);
     }
-  }, [banners.length]);
+  }, [heroCarouselImages.length, banners.length]);
 
   const mealBoxProducts = products.filter(p => p.category === 'meal_box');
 
@@ -64,9 +68,13 @@ export default function HomePage() {
     { title: t('accordion_item3_title'), body: t('accordion_item3_body') },
   ];
 
-  const heroBg = banners.length > 0 && banners[idx]?.image
-    ? getImageUrl(banners[idx].image)
-    : get('hero_banner_image') || '/hero-banner.png';
+  // Determine which images to use for hero carousel (prioritize carousel_images, then banners)
+  const heroImages = heroCarouselImages.length > 0 ? heroCarouselImages : banners;
+
+  // Get current hero image path
+  const heroBg = heroImages.length > 0 && heroImages[idx]?.image_path
+    ? getImageUrl(heroImages[idx].image_path)
+    : (heroImages.length > 0 && heroImages[idx]?.image ? getImageUrl(heroImages[idx].image) : (get('hero_banner_image') || '/hero-banner.png'));
 
   const smallImages = homeImages.filter((_, i) => i !== mainImgIdx);
 
@@ -81,9 +89,9 @@ export default function HomePage() {
           className="hp-hero-full-img"
           onError={e => { e.target.style.display = 'none'; }}
         />
-        {banners.length > 1 && (
+        {heroImages.length > 1 && (
           <div className="hp-dots">
-            {banners.map((_, i) => (
+            {heroImages.map((_, i) => (
               <button
                 key={i}
                 className={`hp-dot${i === idx ? ' active' : ''}`}
