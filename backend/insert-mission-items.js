@@ -5,49 +5,49 @@ const missionItems = [
     key: 'mission_item1_title',
     value: 'ต่อลูกค้า',
     type: 'text',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item1_desc',
     value: 'พัฒนานวัตกรรมอาหารเพื่อสุขภาพ\nเพื่อชีวิตที่ดีกว่า',
     type: 'textarea',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item2_title',
     value: 'ต่อสังคม',
     type: 'text',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item2_desc',
     value: 'เราคือผู้นำนวัตกรรมอาหารเพื่อสุขภาพของประเทศไทย\nและเป็นแหล่งเรียนรู้ บูรณาการการเรียนและการวิจัย',
     type: 'textarea',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item3_title',
     value: 'ต่อพนักงาน',
     type: 'text',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item3_desc',
     value: 'สนับสนุนและพัฒนาความสามารถของพนักงานให้\nมีความเป็นมืออาชีพ สร้างคุณภาพชีวิตที่ดี',
     type: 'textarea',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item4_title',
     value: 'ต่อผู้ถือหุ้น',
     type: 'text',
-    section: 'about'
+    section: 'mission'
   },
   {
     key: 'mission_item4_desc',
     value: 'ใช้นวัตกรรมสร้างธุรกิจเพื่อเพิ่มประสิทธิภาพการจัดการ\nและต่อยอดสู่ผลประกอบการที่ดี',
     type: 'textarea',
-    section: 'about'
+    section: 'mission'
   }
 ];
 
