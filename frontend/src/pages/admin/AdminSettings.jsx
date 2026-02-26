@@ -127,13 +127,17 @@ export default function AdminSettings() {
           {sectionSettings.length === 0 && <p style={{color:'var(--text-light)'}}>ไม่มีการตั้งค่าในส่วนนี้</p>}
           {(() => {
             const filtered = sectionSettings.filter(s => {
+              // For hero and products sections, only show carousel, hide old image fields
               if (['hero', 'products'].includes(activeSection)) {
-                return s.setting_type === 'image';
+                const fieldsToHide = activeSection === 'hero' 
+                  ? ['hero_banner_image']
+                  : ['products_banner_image'];
+                return !fieldsToHide.includes(s.setting_key);
               }
               return true;
             });
             return <>
-              {filtered.length === 0 && sectionSettings.length > 0 && <p style={{color:'var(--text-light)'}}>ไม่มีรูปภาพในส่วนนี้</p>}
+              {filtered.length === 0 && sectionSettings.length > 0 && <p style={{color:'var(--text-light)'}}>ใช้ Slide Banner ด้านบนเพื่อจัดการรูปภาพ</p>}
               {filtered.map(s => (
             <div key={s.setting_key} className="form-group">
               <label className="form-label">{s.label} <small style={{color:'var(--text-light)',fontWeight:400}}>({s.setting_key})</small></label>
