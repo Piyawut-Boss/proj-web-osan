@@ -54,8 +54,8 @@ export default function ProductsPage() {
           <h1>{t('home_hero_title') || 'นวัตกรรมอาหารจากมหาวิทยาลัยสงขลานครินทร์'}</h1>
           <p>{t('home_hero_tagline') || 'สร้างคุณภาพชีวิตของทุกคนที่ดีกว่า'}</p>
           <div className="pp-hero-cats">
-            <div className="pp-hero-cat">{get('showcase_image') ? <img src={getImageUrl(get('showcase_image'))} alt="PSU Blen" style={{height:'32px',width:'auto',objectFit:'contain'}} /> : '🥛'} {t('products_psu_blen_desc') || 'อาหารปั่นเหลวพร้อมทาน'}</div>
-            <div className="pp-hero-cat">{get('mealbox_image') ? <img src={getImageUrl(get('mealbox_image'))} alt="Meal Box" style={{height:'32px',width:'auto',objectFit:'contain'}} /> : '🍱'} {t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</div>
+            <div className="pp-hero-cat">{get('showcase_image') ? <img src={getImageUrl(get('showcase_image'))} alt="PSU Blen" style={{height:'40px',width:'auto',objectFit:'contain'}} /> : '🥛'} {t('products_psu_blen_desc') || 'อาหารปั่นเหลวพร้อมทาน'}</div>
+            <div className="pp-hero-cat">{get('mealbox_image') ? <img src={getImageUrl(get('mealbox_image'))} alt="Meal Box" style={{height:'40px',width:'auto',objectFit:'contain'}} /> : '🍱'} {t('products_meal_box_label') || 'อาหารกล่องพร้อมทาน'}</div>
             <div className="pp-hero-cat">🏭 {t('products_oem_label') || 'บริการ OEM สินค้าครบวงจร'}</div>
           </div>
         </div>
