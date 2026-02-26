@@ -1,8 +1,8 @@
 .pdp-breadcrumb { font-size:.82rem;color:var(--text-light);margin-bottom:28px; }
 .pdp-breadcrumb a { color:var(--primary);text-decoration:none; }
 .pdp-grid { display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:start; }
-.pdp-img-col { border-radius:14px;overflow:hidden;background:#f0f4ff;aspect-ratio:1; }
-.pdp-img { width:100%;height:100%;object-fit:contain;padding:16px; }
+.pdp-img-col { border-radius:14px;overflow:hidden;background:transparent;aspect-ratio:1; }
+.pdp-img { width:100%;height:100%;object-fit:contain;padding:0; }
 .pdp-img-ph { width:100%;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;font-size:6rem;background:linear-gradient(135deg,#e0eaff,#d0daff); }
 .pdp-name { font-size:clamp(1.2rem,2.5vw,1.7rem);font-weight:800;color:var(--text-dark);margin:12px 0 6px;line-height:1.35; }
 .pdp-name-en { font-size:.95rem;color:var(--secondary);font-weight:600;margin-bottom:14px; }
