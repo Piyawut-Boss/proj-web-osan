@@ -127,9 +127,12 @@ export default function AdminSettings() {
           {sectionSettings.length === 0 && <p style={{color:'var(--text-light)'}}>ไม่มีการตั้งค่าในส่วนนี้</p>}
           {(() => {
             const filtered = sectionSettings.filter(s => {
-              // For hero and products sections, show ONLY image fields (image-only upload)
+              // For hero and products sections, ONLY show carousel (hide all old banner fields)
               if (['hero', 'products'].includes(activeSection)) {
-                return s.setting_type === 'image';
+                const bannersToHide = activeSection === 'hero'
+                  ? ['hero_banner_image', 'hero_banner_title', 'hero_banner_subtitle']
+                  : ['products_banner_image', 'products_banner_title', 'products_banner_subtitle'];
+                return !bannersToHide.includes(s.setting_key);
               }
               return true;
             });
