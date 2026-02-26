@@ -19,8 +19,9 @@ app.use((req, res, next) => {
 
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (Postman, curl, same-origin in prod)
+    // Allow requests with no origin (Postman, curl, same-origin in dev)
     if (!origin) {
+      console.log('✅ CORS allowed: no-origin (Postman/curl/same-origin)');
       return callback(null, true);
     }
     // Check if origin is in whitelist or is an ngrok domain
@@ -28,8 +29,17 @@ app.use(cors({
       console.log(`✅ CORS allowed: ${origin}`);
       return callback(null, true);
     }
+    
+    // In development, be more lenient with localhost
+    const devMode = process.env.NODE_ENV !== 'production';
+    if (devMode && origin.startsWith('http://localhost:')) {
+      console.log(`✅ CORS allowed (dev mode): ${origin}`);
+      return callback(null, true);
+    }
+    
     console.log(`❌ CORS blocked: ${origin}`);
-    callback(new Error('CORS not allowed: ' + origin));
+    console.log(`   Allowed origins: ${allowedOrigins.join(', ')}`);
+    callback(new Error(`CORS not allowed: ${origin}`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -94,9 +104,22 @@ if (IS_PROD) {
 
 // ── Error handler ─────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  if (err.message?.includes('CORS')) return res.status(403).json({ success: false, message: err.message });
-  res.status(500).json({ success: false, message: 'Internal server error' });
+  console.error('❌ Error:', err.message);
+  
+  if (err.message?.includes('CORS')) {
+    console.error('   CORS Error - Check origin and allowed hosts');
+    return res.status(403).json({ 
+      success: false, 
+      message: err.message,
+      hint: 'CORS origin not allowed. Check backend configuration.'
+    });
+  }
+  
+  res.status(500).json({ 
+    success: false, 
+    message: 'Internal server error',
+    error: process.env.NODE_ENV !== 'production' ? err.message : undefined
+  });
 });
 
 const PORT = process.env.PORT || 5000;
