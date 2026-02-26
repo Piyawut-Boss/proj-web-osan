@@ -16,7 +16,7 @@
 .pp-group-header { display:flex;align-items:flex-start;gap:20px;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff); }
 .pp-mb-header { background:linear-gradient(135deg,#e8f8ee,#d0f0e0); }
 .pp-group-icon { font-size:2.5rem;flex-shrink:0;width:140px;height:160px;border-radius:10px;overflow:hidden;background:#f0f4ff;display:flex;align-items:center;justify-content:center; }
-.pp-group-icon img { width:100%;height:100%;object-fit:contain;padding:8px; }
+.pp-group-icon img { width:100%;height:100%;object-fit:contain;padding:0; }
 .pp-group-header h3 { font-size:1.2rem;font-weight:800;color:var(--primary);margin-bottom:8px; }
 .pp-group-header h3 span { font-size:.9rem;font-weight:500;color:var(--secondary); }
 .pp-group-header p { font-size:.85rem;color:var(--text-medium);line-height:1.65;margin:0; }
@@ -26,7 +26,7 @@
 .pp-product-row:last-child { border-bottom:none; }
 .pp-product-row:hover { background:#f8faff; }
 .pp-prod-img { width:90px;height:90px;border-radius:10px;overflow:hidden;background:#f0f4ff;flex-shrink:0; }
-.pp-prod-img img { width:100%;height:100%;object-fit:contain;padding:6px; }
+.pp-prod-img img { width:100%;height:100%;object-fit:contain;padding:0; }
 .pp-img-ph { width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(135deg,#e0eaff,#d0daff); }
 .pp-img-ph.lg { width:260px;height:200px;font-size:5rem;border-radius:12px; }
 .pp-prod-info { flex:1; }
