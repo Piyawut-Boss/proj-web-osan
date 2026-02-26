@@ -114,7 +114,16 @@ export default function AdminSettings() {
         <div className="settings-form">
           <h2 className="settings-section-title">{SECTIONS.find(s=>s.key===activeSection)?.label}</h2>
           {sectionSettings.length === 0 && <p style={{color:'var(--text-light)'}}>ไม่มีการตั้งค่าในส่วนนี้</p>}
-          {sectionSettings.map(s => (
+          {(() => {
+            const filtered = sectionSettings.filter(s => {
+              if (['hero', 'products'].includes(activeSection)) {
+                return s.setting_type === 'image';
+              }
+              return true;
+            });
+            return <>
+              {filtered.length === 0 && sectionSettings.length > 0 && <p style={{color:'var(--text-light)'}}>ไม่มีรูปภาพในส่วนนี้</p>}
+              {filtered.map(s => (
             <div key={s.setting_key} className="form-group">
               <label className="form-label">{s.label} <small style={{color:'var(--text-light)',fontWeight:400}}>({s.setting_key})</small></label>
 
@@ -144,7 +153,9 @@ export default function AdminSettings() {
                 <input className="form-control" type="text" value={formData[s.setting_key]||''} onChange={e=>handleChange(s.setting_key,e.target.value)} placeholder={s.label}/>
               )}
             </div>
-          ))}
+              ))}
+            </>
+          })()}
 
           {sectionSettings.length > 0 && (
             <div style={{marginTop:20,paddingTop:20,borderTop:'1px solid var(--border)'}}>
