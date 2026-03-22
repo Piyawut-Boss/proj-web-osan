@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
 const upload = require('../middleware/upload');
-const { getAllReviews, getAllReviewsAdmin, createReview, updateReview, deleteReview } = require('../controllers/mainController');
+const { getAllReviews, getReviewById, getAllReviewsAdmin, createReview, updateReview, deleteReview } = require('../controllers/mainController');
 
 router.get('/',             getAllReviews);                                          // public
+router.get('/:id',          getReviewById);                                          // public detail
 router.get('/admin/all',    authenticateToken, getAllReviewsAdmin);                  // admin
 router.post('/',            authenticateToken, upload.single('image'), createReview);
 router.put('/:id',          authenticateToken, upload.single('image'), updateReview);

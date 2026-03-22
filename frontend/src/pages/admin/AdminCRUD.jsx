@@ -44,20 +44,21 @@ export const AdminReviews = () => {
   const {data,loading,save,remove,refetch} = useCRUD('reviews/admin/all');
   const [open,setOpen]=useState(false);
   const [editing,setEditing]=useState(null);
-  const [form,setForm]=useState({title:'',description:''});
+  const [form,setForm]=useState({title:'',description:'',published_date:'',link_url:''});
   const [imgFile,setImgFile]=useState(null);
   const [imgPrev,setImgPrev]=useState(null);
   const [saving,setSaving]=useState(false);
   const [alert,setAlert]=useState(null);
   const showAlert=(m,t='success')=>{setAlert({m,t});setTimeout(()=>setAlert(null),3000)};
-  const openCreate=()=>{setEditing(null);setForm({title:'',description:''});setImgFile(null);setImgPrev(null);setOpen(true)};
-  const openEdit=r=>{setEditing(r);setForm({title:r.title||'',description:r.description||''});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
+  const openCreate=()=>{setEditing(null);setForm({title:'',description:'',published_date:new Date().toISOString().split('T')[0],link_url:''});setImgFile(null);setImgPrev(null);setOpen(true)};
+  const openEdit=r=>{setEditing(r);setForm({title:r.title||'',description:r.description||'',published_date:r.published_date||'',link_url:r.link_url||''});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
   const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'reviews');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
   const del=async id=>{try{await remove(id,'reviews');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
   const cols=[
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt=""/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'title',label:'หัวข้อ'},
-    {key:'description',label:'รายละเอียด',render:v=>v?v.slice(0,70)+'...':'—'},
+    {key:'published_date',label:'วันที่',render:v=>v?new Date(v).toLocaleDateString('th-TH'):'—'},
+    {key:'description',label:'รายละเอียด',render:v=>v?v.slice(0,50)+'...':'—'},
   ];
   return (
     <div className="admin-page">
@@ -69,6 +70,54 @@ export const AdminReviews = () => {
           <ImgField preview={imgPrev} onChange={e=>{const f=e.target.files[0];if(f){setImgFile(f);setImgPrev(URL.createObjectURL(f))}}}/>
           <div className="form-group"><label className="form-label">หัวข้อ *</label><input className="form-control" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} required/></div>
           <div className="form-group"><label className="form-label">รายละเอียด</label><textarea className="form-control" rows={3} value={form.description} onChange={e=>setForm({...form,description:e.target.value})}/></div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">วันที่เผยแพร่</label><input type="date" className="form-control" value={form.published_date} onChange={e=>setForm({...form,published_date:e.target.value})}/></div>
+            <div className="form-group"><label className="form-label">ลิงค์</label><input type="url" className="form-control" value={form.link_url} onChange={e=>setForm({...form,link_url:e.target.value})} placeholder="https://..."/></div>
+          </div>
+          <ModalActions onClose={()=>setOpen(false)} saving={saving}/>
+        </form>
+      </AdminModal>
+    </div>
+  );
+};
+
+// ── NEWS ───────────────────────────────────────────────────────────────────────
+export const AdminNews = () => {
+  const {data,loading,save,remove,refetch} = useCRUD('news/admin/all');
+  const [open,setOpen]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const [form,setForm]=useState({title:'',description:'',content:'',published_date:'',link_url:'',is_published:'true'});
+  const [imgFile,setImgFile]=useState(null);
+  const [imgPrev,setImgPrev]=useState(null);
+  const [saving,setSaving]=useState(false);
+  const [alert,setAlert]=useState(null);
+  const showAlert=(m,t='success')=>{setAlert({m,t});setTimeout(()=>setAlert(null),3000)};
+  const openCreate=()=>{setEditing(null);setForm({title:'',description:'',content:'',published_date:new Date().toISOString().split('T')[0],link_url:'',is_published:'true'});setImgFile(null);setImgPrev(null);setOpen(true)};
+  const openEdit=r=>{setEditing(r);setForm({title:r.title||'',description:r.description||'',content:r.content||'',published_date:r.published_date||'',link_url:r.link_url||'',is_published:String(r.is_published??true)});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
+  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'news');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
+  const del=async id=>{try{await remove(id,'news');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
+  const cols=[
+    {key:'image',label:'รูป',render:v=>v?<img src={v} alt=""/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
+    {key:'title',label:'หัวข้อ'},
+    {key:'published_date',label:'วันที่',render:v=>v?new Date(v).toLocaleDateString('th-TH'):'—'},
+    {key:'is_published',label:'สถานะ',render:v=><span className={`badge ${v?'badge-accent':'badge-primary'}`}>{v?'เผยแพร่':'ร่าง'}</span>},
+  ];
+  return (
+    <div className="admin-page">
+      <div className="page-header"><div><h1>จัดการข่าวสาร</h1></div><button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มข่าวสาร</button></div>
+      {alert&&<div className={`alert alert-${alert.t}`}>{alert.m}</div>}
+      <div className="page-content"><AdminTable columns={cols} data={data} onEdit={openEdit} onDelete={del} loading={loading}/></div>
+      <AdminModal isOpen={open} onClose={()=>setOpen(false)} title={editing?'แก้ไขข่าวสาร':'เพิ่มข่าวสารใหม่'} size="lg">
+        <form onSubmit={submit}>
+          <ImgField preview={imgPrev} onChange={e=>{const f=e.target.files[0];if(f){setImgFile(f);setImgPrev(URL.createObjectURL(f))}}}/>
+          <div className="form-group"><label className="form-label">หัวข้อ *</label><input className="form-control" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} required/></div>
+          <div className="form-group"><label className="form-label">คำบรรยาย (หัวข้อย่อย)</label><input className="form-control" value={form.description} onChange={e=>setForm({...form,description:e.target.value})}/></div>
+          <div className="form-group"><label className="form-label">เนื้อหา</label><textarea className="form-control" rows={5} value={form.content} onChange={e=>setForm({...form,content:e.target.value})}/></div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">วันที่เผยแพร่</label><input type="date" className="form-control" value={form.published_date} onChange={e=>setForm({...form,published_date:e.target.value})}/></div>
+            <div className="form-group"><label className="form-label">ลิงค์</label><input type="url" className="form-control" value={form.link_url} onChange={e=>setForm({...form,link_url:e.target.value})} placeholder="https://..."/></div>
+          </div>
+          <div className="form-group"><label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer'}}><input type="checkbox" checked={form.is_published==='true'||form.is_published===true} onChange={e=>setForm({...form,is_published:String(e.target.checked)})}/><span className="form-label" style={{margin:0}}>เผยแพร่</span></label></div>
           <ModalActions onClose={()=>setOpen(false)} saving={saving}/>
         </form>
       </AdminModal>
@@ -173,7 +222,7 @@ export const AdminBanners = () => {
 
 // ── BOARD MEMBERS ────────────────────────────────────────────────────────────
 export const AdminBoardMembers = () => {
-  const {data,loading,save,remove} = useCRUD('board-members');
+  const {data,loading,save,remove} = useCRUD('board-members/admin/all');
   const [open,setOpen]=useState(false);
   const [editing,setEditing]=useState(null);
   const [form,setForm]=useState({name:'',position:'',board_type:'board',sort_order:'0'});
@@ -184,8 +233,8 @@ export const AdminBoardMembers = () => {
   const showAlert=(m,t='success')=>{setAlert({m,t});setTimeout(()=>setAlert(null),3000)};
   const openCreate=()=>{setEditing(null);setForm({name:'',position:'',board_type:'board',sort_order:'0'});setImgFile(null);setImgPrev(null);setOpen(true)};
   const openEdit=r=>{setEditing(r);setForm({name:r.name||'',position:r.position||'',board_type:r.board_type||'board',sort_order:String(r.sort_order||0)});setImgPrev(r.image||null);setImgFile(null);setOpen(true)};
-  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile);showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
-  const del=async id=>{try{await remove(id);showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
+  const submit=async e=>{e.preventDefault();setSaving(true);try{await save(editing,form,imgFile,'board-members');showAlert(editing?'อัปเดตสำเร็จ':'เพิ่มสำเร็จ');setOpen(false)}catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}};
+  const del=async id=>{try{await remove(id,'board-members');showAlert('ลบสำเร็จ')}catch{showAlert('เกิดข้อผิดพลาด','error')}};
   const cols=[
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt="" style={{height:60,width:'auto'}}/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'name',label:'ชื่อ'},
@@ -212,4 +261,4 @@ export const AdminBoardMembers = () => {
   );
 };
 
-export default AdminReviews;
+export default AdminNews;

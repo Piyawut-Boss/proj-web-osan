@@ -6,10 +6,10 @@ import ar from './ar';
 
 export const LANGUAGES = [
   { code: 'th', label: 'ไทย',    flag: '🇹🇭', dir: 'ltr' },
-  { code: 'en', label: 'English', flag: '🇬🇧', dir: 'ltr' },
+  { code: 'en', label: 'English', flag: 'EN', dir: 'ltr' },
   { code: 'zh', label: '中文',    flag: '🇨🇳', dir: 'ltr' },
   { code: 'ms', label: 'Melayu', flag: '🇲🇾', dir: 'ltr' },
-  { code: 'ar', label: 'العربية', flag: '🇸🇦', dir: 'rtl' },
+  { code: 'ar', label: 'العربية', flag: 'AR', dir: 'rtl' },
 ];
 
 export const translations = { th, en, zh, ms, ar };

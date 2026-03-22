@@ -24,6 +24,7 @@ export default function NewsDetailPage() {
           {news.image && <img src={news.image} alt={news.title} style={{width:'100%',borderRadius:12,marginBottom:28,maxHeight:400,objectFit:'cover'}}/>}
           {news.description && <p style={{fontSize:'1rem',color:'var(--text-medium)',lineHeight:1.8,marginBottom:20,fontWeight:500}}>{news.description}</p>}
           {news.content && <div style={{fontSize:'.95rem',color:'var(--text-medium)',lineHeight:1.85}} dangerouslySetInnerHTML={{__html:news.content.replace(/\n/g,'<br/>')}}/>}
+          {news.link_url && <a href={news.link_url} target="_blank" rel="noopener noreferrer" style={{display:'inline-flex',alignItems:'center',gap:8,color:'var(--primary)',textDecoration:'none',fontSize:'.95rem',fontWeight:600,marginTop:20,padding:'12px 16px',border:'1px solid var(--primary)',borderRadius:6,transition:'all .3s'}} onMouseEnter={e=>{e.currentTarget.style.background='var(--primary)'; e.currentTarget.style.color='white'}} onMouseLeave={e=>{e.currentTarget.style.color='var(--primary)'; e.currentTarget.style.background='transparent'}}>🔗 อ่านเพิ่มเติม</a>}
         </div>
       </section>
     </PublicLayout>

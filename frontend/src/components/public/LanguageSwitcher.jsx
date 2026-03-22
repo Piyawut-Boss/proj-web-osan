@@ -37,7 +37,7 @@ export default function LanguageSwitcher() {
               className={`lang-option${l.code === lang ? ' active' : ''}`}
               onClick={() => { changeLang(l.code); setOpen(false); }}
               role="menuitem"
-              dir={l.dir}
+              dir="ltr"
             >
               <span className="lang-flag">{l.flag}</span>
               <span className="lang-name">{l.label}</span>

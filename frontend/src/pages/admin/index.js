@@ -1,1 +1,1 @@
-export { AdminReviews, AdminCertificates, AdminBoardMembers, AdminBanners } from './AdminCRUD';
+export { AdminNews, AdminReviews, AdminCertificates, AdminBoardMembers, AdminBanners } from './AdminCRUD';

@@ -134,12 +134,12 @@ const getAllNewsAdmin = async (req, res) => {
 
 const createNews = async (req, res) => {
   try {
-    const { title, description, content } = req.body;
+    const { title, description, content, published_date, link_url, is_published } = req.body;
     if (!title) return res.status(400).json({ success: false, message: 'title is required' });
     const image = req.file ? req.file.path.replace(/\\/g, '/').replace(/.*\/uploads\//, 'uploads/') : null;
     const [result] = await db.execute(
-      'INSERT INTO news (title, description, content, image) VALUES (?,?,?,?)',
-      [title, description || null, content || null, image]
+      'INSERT INTO news (title, description, content, image, published_date, link_url, is_published) VALUES (?,?,?,?,?,?,?)',
+      [title, description || null, content || null, image, published_date || null, link_url || null, toBool(is_published, 1)]
     );
     res.status(201).json({ success: true, message: 'News created', id: result.insertId });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
@@ -147,16 +147,16 @@ const createNews = async (req, res) => {
 
 const updateNews = async (req, res) => {
   try {
-    const { title, description, content, is_published } = req.body;
+    const { title, description, content, published_date, link_url, is_published } = req.body;
     const [existing] = await db.execute('SELECT * FROM news WHERE id = ?', [req.params.id]);
     if (!existing.length) return res.status(404).json({ success: false, message: 'News not found' });
     let image = existing[0].image;
     if (req.file) { deleteFile(image); image = req.file.path.replace(/\\/g, '/').replace(/.*\/uploads\//, 'uploads/'); }
     await db.execute(
-      'UPDATE news SET title=?, description=?, content=?, image=?, is_published=? WHERE id=?',
+      'UPDATE news SET title=?, description=?, content=?, image=?, published_date=?, link_url=?, is_published=? WHERE id=?',
       [title || existing[0].title, description ?? existing[0].description,
-       content ?? existing[0].content, image,
-       toBool(is_published, existing[0].is_published), req.params.id]
+       content ?? existing[0].content, image, published_date ?? existing[0].published_date,
+       link_url ?? existing[0].link_url, toBool(is_published, existing[0].is_published), req.params.id]
     );
     res.json({ success: true, message: 'News updated' });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
@@ -188,14 +188,22 @@ const getAllReviewsAdmin = async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
+const getReviewById = async (req, res) => {
+  try {
+    const [rows] = await db.execute('SELECT * FROM reviews WHERE id = ?', [req.params.id]);
+    if (!rows.length) return res.status(404).json({ success: false, message: 'Review not found' });
+    res.json({ success: true, data: { ...rows[0], image: buildImageUrl(rows[0].image) } });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
 const createReview = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, published_date, link_url } = req.body;
     if (!title) return res.status(400).json({ success: false, message: 'title is required' });
     const image = req.file ? req.file.path.replace(/\\/g, '/').replace(/.*\/uploads\//, 'uploads/') : null;
     const [result] = await db.execute(
-      'INSERT INTO reviews (title, description, image) VALUES (?,?,?)',
-      [title, description || null, image]
+      'INSERT INTO reviews (title, description, image, published_date, link_url) VALUES (?,?,?,?,?)',
+      [title, description || null, image, published_date || null, link_url || null]
     );
     res.status(201).json({ success: true, message: 'Review created', id: result.insertId });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
@@ -203,15 +211,16 @@ const createReview = async (req, res) => {
 
 const updateReview = async (req, res) => {
   try {
-    const { title, description, is_active } = req.body;
+    const { title, description, published_date, link_url, is_active } = req.body;
     const [existing] = await db.execute('SELECT * FROM reviews WHERE id = ?', [req.params.id]);
     if (!existing.length) return res.status(404).json({ success: false, message: 'Review not found' });
     let image = existing[0].image;
     if (req.file) { deleteFile(image); image = req.file.path.replace(/\\/g, '/').replace(/.*\/uploads\//, 'uploads/'); }
     await db.execute(
-      'UPDATE reviews SET title=?, description=?, image=?, is_active=? WHERE id=?',
+      'UPDATE reviews SET title=?, description=?, image=?, published_date=?, link_url=?, is_active=? WHERE id=?',
       [title || existing[0].title, description ?? existing[0].description,
-       image, toBool(is_active, existing[0].is_active), req.params.id]
+       image, published_date ?? existing[0].published_date, link_url ?? existing[0].link_url, 
+       toBool(is_active, existing[0].is_active), req.params.id]
     );
     res.json({ success: true, message: 'Review updated' });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
@@ -278,19 +287,19 @@ const deleteCertificate = async (req, res) => {
 
 const getAllBoardMembers = async (req, res) => {
   try {
-    const [rows] = await db.execute('SELECT * FROM board_members ORDER BY section ASC, sort_order ASC');
+    const [rows] = await db.execute('SELECT * FROM board_members ORDER BY board_type ASC, sort_order ASC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
 const createBoardMember = async (req, res) => {
   try {
-    const { name, position, section, sort_order } = req.body;
+    const { name, position, board_type, sort_order } = req.body;
     if (!name) return res.status(400).json({ success: false, message: 'name is required' });
     const image = req.file ? req.file.path.replace(/\\/g, '/').replace(/.*\/uploads\//, 'uploads/') : null;
     const [result] = await db.execute(
-      'INSERT INTO board_members (name, position, section, image, sort_order) VALUES (?,?,?,?,?)',
-      [name, position || null, section || 'board', image, parseInt(sort_order) || 0]
+      'INSERT INTO board_members (name, position, board_type, image, sort_order) VALUES (?,?,?,?,?)',
+      [name, position || null, board_type || 'board', image, parseInt(sort_order) || 0]
     );
     res.status(201).json({ success: true, message: 'Board member created', id: result.insertId });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
@@ -298,15 +307,15 @@ const createBoardMember = async (req, res) => {
 
 const updateBoardMember = async (req, res) => {
   try {
-    const { name, position, section, sort_order } = req.body;
+    const { name, position, board_type, sort_order } = req.body;
     const [existing] = await db.execute('SELECT * FROM board_members WHERE id = ?', [req.params.id]);
     if (!existing.length) return res.status(404).json({ success: false, message: 'Board member not found' });
     let image = existing[0].image;
     if (req.file) { deleteFile(image); image = req.file.path.replace(/\\/g, '/').replace(/.*\/uploads\//, 'uploads/'); }
     await db.execute(
-      'UPDATE board_members SET name=?, position=?, section=?, image=?, sort_order=? WHERE id=?',
+      'UPDATE board_members SET name=?, position=?, board_type=?, image=?, sort_order=? WHERE id=?',
       [name || existing[0].name, position ?? existing[0].position,
-       section || existing[0].section, image,
+       board_type || existing[0].board_type, image,
        parseInt(sort_order) ?? existing[0].sort_order, req.params.id]
     );
     res.json({ success: true, message: 'Board member updated' });
@@ -401,7 +410,7 @@ const getDashboardStats = async (req, res) => {
 module.exports = {
   getAllProducts, getAllProductsAdmin, getProductById, createProduct, updateProduct, deleteProduct,
   getAllNews, getNewsById, getAllNewsAdmin, createNews, updateNews, deleteNews,
-  getAllReviews, getAllReviewsAdmin, createReview, updateReview, deleteReview,
+  getAllReviews, getReviewById, getAllReviewsAdmin, createReview, updateReview, deleteReview,
   getAllCertificates, createCertificate, updateCertificate, deleteCertificate,
   getAllBoardMembers, createBoardMember, updateBoardMember, deleteBoardMember,
   getAllBanners, getAllBannersAdmin, createBanner, updateBanner, deleteBanner,

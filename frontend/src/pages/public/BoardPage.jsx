@@ -31,7 +31,7 @@ export default function BoardPage() {
   const getMembersBySection = (sectionName) => {
     if (!Array.isArray(boardMembers)) return [];
     return boardMembers
-      .filter(m => m && m.section === sectionName)
+      .filter(m => m && m.board_type === sectionName)
       .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
   };
 

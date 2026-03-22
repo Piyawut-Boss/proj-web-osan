@@ -9,7 +9,8 @@ import ProductsPage      from './pages/public/ProductsPage';
 import ProductDetailPage from './pages/public/ProductDetailPage';
 import NewsPage          from './pages/public/NewsPage';
 import NewsDetailPage    from './pages/public/NewsDetailPage';
-import ReviewsPage       from './pages/public/ReviewsPage';
+
+import ReviewsDetailPage from './pages/public/ReviewsDetailPage';
 import CertificatesPage  from './pages/public/CertificatesPage';
 import ContactPage       from './pages/public/ContactPage';
 
@@ -17,8 +18,7 @@ import ContactPage       from './pages/public/ContactPage';
 import AdminLogin     from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts  from './pages/admin/AdminProducts';
-import AdminNews      from './pages/admin/AdminNews';
-import { AdminReviews, AdminCertificates, AdminBoardMembers, AdminBanners } from './pages/admin/AdminCRUD';
+import { AdminNews, AdminReviews, AdminCertificates, AdminBoardMembers, AdminBanners } from './pages/admin/AdminCRUD';
 import AdminSettings  from './pages/admin/AdminSettings';
 import AdminLayout    from './components/admin/AdminLayout';
 
@@ -39,11 +39,12 @@ export default function App() {
         <Route path="/"              element={<HomePage />} />
         <Route path="/about"         element={<AboutPage />} />
         <Route path="/board"         element={<BoardPage />} />
-        <Route path="/products"      element={<ProductsPage />} />
         <Route path="/products/:id"  element={<ProductDetailPage />} />
-        <Route path="/news"          element={<NewsPage />} />
+        <Route path="/products"      element={<ProductsPage />} />
         <Route path="/news/:id"      element={<NewsDetailPage />} />
-        <Route path="/reviews"       element={<ReviewsPage />} />
+        <Route path="/news"          element={<NewsPage />} />
+        <Route path="/reviews/:id"   element={<ReviewsDetailPage />} />
+        <Route path="/reviews"       element={<Navigate to="/news" replace />} />
         <Route path="/certificates"  element={<CertificatesPage />} />
         <Route path="/contact"       element={<ContactPage />} />
 
