@@ -5,8 +5,8 @@ const upload = require('../middleware/upload');
 const { getAllReviews, getReviewById, getAllReviewsAdmin, createReview, updateReview, deleteReview } = require('../controllers/mainController');
 
 router.get('/',             getAllReviews);                                          // public
-router.get('/:id',          getReviewById);                                          // public detail
 router.get('/admin/all',    authenticateToken, getAllReviewsAdmin);                  // admin
+router.get('/:id',          getReviewById);                                          // public detail
 router.post('/',            authenticateToken, upload.single('image'), createReview);
 router.put('/:id',          authenticateToken, upload.single('image'), updateReview);
 router.delete('/:id',       authenticateToken, deleteReview);
