@@ -15,7 +15,9 @@ const toUrl = (val) => {
 const deleteOldFile = (val) => {
   if (!val || val.startsWith('http')) return;
   try {
-    const full = path.join(__dirname, '..', val.replace(/\\/g, '/'));
+    const uploadsDir = path.resolve(__dirname, '..', 'uploads');
+    const full = path.resolve(__dirname, '..', val.replace(/\\/g, '/'));
+    if (!full.startsWith(uploadsDir)) return;
     if (fs.existsSync(full)) fs.unlinkSync(full);
   } catch (e) { /* ignore */ }
 };

@@ -4,6 +4,7 @@ const upload = require('../middleware/upload');
 const fs = require('fs');
 const path = require('path');
 const { authenticateToken } = require('../middleware/auth');
+const { validateId } = require('../middleware/validate');
 
 const router = express.Router();
 
@@ -65,7 +66,7 @@ router.post('/:section/add', authenticateToken, upload.single('image'), async (r
 });
 
 // Delete carousel image
-router.delete('/:imageId', authenticateToken, async (req, res) => {
+router.delete('/:imageId', authenticateToken, validateId, async (req, res) => {
   try {
     const { imageId } = req.params;
 
@@ -87,11 +88,12 @@ router.delete('/:imageId', authenticateToken, async (req, res) => {
       [imageId]
     );
 
-    // Delete physical file
-    const filePath = path.join(__dirname, '../public', imagePath);
-    fs.unlink(filePath, () => {
-      // Ignore file deletion errors
-    });
+    // Delete physical file (safe: verify within uploads/)
+    const uploadsDir = path.resolve(__dirname, '..');
+    const filePath = path.resolve(__dirname, '..', imagePath.replace(/\\/g, '/'));
+    if (filePath.startsWith(path.join(uploadsDir, 'uploads'))) {
+      fs.unlink(filePath, () => {});
+    }
 
     res.json({ message: 'Image deleted successfully' });
   } catch (err) {
@@ -105,8 +107,14 @@ router.put('/:section/reorder', authenticateToken, async (req, res) => {
     const { section } = req.params;
     const { imageIds } = req.body;
 
-    if (!Array.isArray(imageIds) || imageIds.length === 0) {
+    if (!Array.isArray(imageIds) || imageIds.length === 0 || imageIds.length > 100) {
       return res.status(400).json({ message: 'Invalid imageIds array' });
+    }
+    if (!imageIds.every(id => Number.isInteger(id) && id > 0)) {
+      return res.status(400).json({ message: 'All imageIds must be positive integers' });
+    }
+    if (!VALID_SECTIONS.includes(section)) {
+      return res.status(400).json({ message: 'Invalid section' });
     }
 
     // Update sort order for all images

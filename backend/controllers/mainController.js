@@ -8,11 +8,13 @@ const serverError = (res, err) => {
   return res.status(500).json({ success: false, message: 'Server error' });
 };
 
-// Delete a file safely
+// Delete a file safely — prevented from path traversal
 const deleteFile = (filePath) => {
   if (!filePath) return;
   try {
-    const full = path.join(__dirname, '..', filePath.replace(/\\/g, '/'));
+    const uploadsDir = path.resolve(__dirname, '..', 'uploads');
+    const full = path.resolve(__dirname, '..', filePath.replace(/\\/g, '/'));
+    if (!full.startsWith(uploadsDir)) return;
     if (fs.existsSync(full)) fs.unlinkSync(full);
   } catch (e) { /* ignore */ }
 };
