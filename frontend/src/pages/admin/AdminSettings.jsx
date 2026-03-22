@@ -180,15 +180,15 @@ export default function AdminSettings() {
       </div>
 
       <style>{`
-        .settings-layout{display:grid;grid-template-columns:220px 1fr;gap:28px;margin-top:24px}
-        .settings-sidebar{display:flex;flex-direction:column;gap:4px;background:#f8faff;border-radius:12px;padding:12px;height:fit-content;position:sticky;top:20px}
-        .settings-nav-btn{background:none;border:none;padding:10px 14px;border-radius:8px;text-align:left;cursor:pointer;font-size:.85rem;font-family:var(--font-thai);color:var(--text-medium);transition:all .15s}
-        .settings-nav-btn:hover{background:#e8f0fe;color:var(--primary)}
-        .settings-nav-btn.active{background:var(--primary);color:#fff;font-weight:600}
-        .settings-form{background:#fff;border-radius:12px;padding:28px;border:1px solid var(--border)}
-        .settings-section-title{font-size:1.2rem;font-weight:700;color:var(--primary);margin-bottom:24px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+        .settings-layout{display:grid;grid-template-columns:230px 1fr;gap:28px;margin-top:24px}
+        .settings-sidebar{display:flex;flex-direction:column;gap:3px;background:#fafbfd;border-radius:14px;padding:14px;height:fit-content;position:sticky;top:80px;border:1px solid #e5e9f0}
+        .settings-nav-btn{background:none;border:none;padding:10px 16px;border-radius:10px;text-align:left;cursor:pointer;font-size:.84rem;font-family:var(--font-thai);color:var(--text-medium);transition:all .15s;font-weight:500}
+        .settings-nav-btn:hover{background:#eef2ff;color:var(--primary)}
+        .settings-nav-btn.active{background:var(--primary);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(31,60,136,.2)}
+        .settings-form{background:#fff;border-radius:14px;padding:32px;border:1px solid #e5e9f0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+        .settings-section-title{font-size:1.15rem;font-weight:700;color:var(--text-dark);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #e5e9f0}
         .settings-img-field{display:flex;gap:20px;align-items:flex-start}
-        .settings-img-preview{width:200px;height:140px;border-radius:10px;overflow:hidden;border:2px dashed var(--border);flex-shrink:0;background:#f8faff}
+        .settings-img-preview{width:200px;height:140px;border-radius:12px;overflow:hidden;border:2px dashed #d0d8e5;flex-shrink:0;background:#fafbfd}
         .settings-img-preview img{width:100%;height:100%;object-fit:contain}
         .settings-img-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:2rem;color:var(--text-light)}
         .settings-img-ph span{font-size:.75rem}

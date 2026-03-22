@@ -149,20 +149,19 @@ export default function CarouselManager({ section, label, onAlert }) {
       )}
 
       <style>{`
-        .carousel-manager { margin: 24px 0; padding: 20px; background: #f8faff; border-radius: 12px; }
+        .carousel-manager { margin: 24px 0; padding: 24px; background: #fafbfd; border-radius: 14px; border: 1px solid #e5e9f0; }
         .carousel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; }
-        .carousel-header h3 { margin: 0; font-size: 1rem; color: var(--primary); }
+        .carousel-header h3 { margin: 0; font-size: 1rem; color: var(--text-dark); font-weight: 700; }
         .carousel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
-        .carousel-item { position: relative; border: 2px dashed var(--border); border-radius: 10px; overflow: hidden; cursor: grab; transition: all 0.2s; background: #fff; }
-        .carousel-item:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .carousel-item { position: relative; border: 1.5px solid #e5e9f0; border-radius: 12px; overflow: hidden; cursor: grab; transition: all 0.2s; background: #fff; }
+        .carousel-item:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .carousel-item.dragging { opacity: 0.5; transform: scale(0.95); }
-        .carousel-item-image { width: 100%; padding-bottom: 100%; position: relative; background: #f0f4ff; }
+        .carousel-item-image { width: 100%; padding-bottom: 100%; position: relative; background: #f6f8fb; }
         .carousel-item-image img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .carousel-item-meta { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); padding: 8px; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.75rem; }
-        .carousel-item-order { font-weight: 600; }
+        .carousel-item-meta { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 10px 8px 8px; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.75rem; }
+        .carousel-item-order { font-weight: 700; background: rgba(255,255,255,.2); padding: 2px 8px; border-radius: 4px; backdrop-filter: blur(4px); }
         .btn-icon { background: none; border: none; color: #ff6b6b; font-size: 1rem; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s; }
         .btn-icon:hover { background: rgba(255,107,107,0.2); }
-        .btn-danger:hover { color: #ff5252; }
         @media(max-width:800px) { .carousel-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); } }
       `}</style>
     </div>

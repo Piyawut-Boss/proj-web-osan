@@ -21,8 +21,8 @@ const AdminTable = ({ columns, data, onEdit, onDelete, loading }) => {
               ))}
               <td>
                 <div className="action-btns">
-                  <button className="btn btn-sm" style={{ background: 'var(--primary)', color: 'white' }} onClick={() => onEdit(row)}>✏️ Edit</button>
-                  <button className="btn btn-danger btn-sm" onClick={() => { if (window.confirm('ยืนยันการลบ?')) onDelete(row.id); }}>🗑️ Delete</button>
+                  <button className="btn btn-sm btn-edit" onClick={() => onEdit(row)}>✏️ แก้ไข</button>
+                  <button className="btn btn-sm btn-del" onClick={() => { if (window.confirm('ยืนยันการลบ?')) onDelete(row.id); }}>🗑️ ลบ</button>
                 </div>
               </td>
             </tr>
