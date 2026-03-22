@@ -48,13 +48,22 @@ const getProfile = async (req, res) => {
     res.json({ success: true, data: rows[0] });
   } catch (error) {
     console.error('Profile error:', error);
-    res.status(500).json({ success: false, message: 'Server error', details: error.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
+
+    // Password strength validation
+    if (!newPassword || newPassword.length < 8) {
+      return res.status(400).json({ success: false, message: 'New password must be at least 8 characters' });
+    }
+    if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      return res.status(400).json({ success: false, message: 'Password must contain uppercase, lowercase, and a number' });
+    }
+
     const [rows] = await db.execute('SELECT * FROM admins WHERE id = ?', [req.user.id]);
     if (rows.length === 0) return res.status(404).json({ success: false, message: 'Admin not found' });
 

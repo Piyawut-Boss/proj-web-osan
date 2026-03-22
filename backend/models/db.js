@@ -20,9 +20,10 @@ const initPool = async () => {
       enableKeepAlive: true,
       keepAliveInitialDelayMs: 0,
       
-      ssl: { 
-        rejectUnauthorized: false 
-      }
+      // Use SSL if DB_SSL env var is set, with proper verification in production
+      ...(process.env.DB_SSL === 'true' ? {
+        ssl: { rejectUnauthorized: process.env.NODE_ENV === 'production' }
+      } : {}),
     });
     
     console.log('✅ MySQL connected:', process.env.DB_NAME || 'psu_agro_food');

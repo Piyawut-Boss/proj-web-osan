@@ -1,45 +1,58 @@
 require('dotenv').config();
-const express = require('express');
-const cors    = require('cors');
-const path    = require('path');
-const fs      = require('fs');
+const express    = require('express');
+const cors       = require('cors');
+const path       = require('path');
+const fs         = require('fs');
+const helmet     = require('helmet');
+const rateLimit  = require('express-rate-limit');
+const hpp        = require('hpp');
 
 const app = express();
 const IS_PROD = process.env.NODE_ENV === 'production';
+
+// ── Security headers (helmet) ────────────────────────────────────────────────
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }, // allow images to load cross-origin
+  contentSecurityPolicy: false, // CSP handled by frontend meta or reverse proxy
+}));
+
+// ── HTTP Parameter Pollution protection ──────────────────────────────────────
+app.use(hpp());
+
+// ── Global rate limiter ──────────────────────────────────────────────────────
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300,                  // 300 requests per window per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many requests, please try again later.' },
+});
+app.use(globalLimiter);
+
+// ── Strict rate limiter for auth endpoints ───────────────────────────────────
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 15,                   // 15 login attempts per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many login attempts, please try again later.' },
+});
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5177,http://localhost:5178,http://localhost:5179,http://localhost:5180,http://localhost:5181,http://localhost:5182')
   .split(',').map(s => s.trim());
 
-// Debug: Log all incoming origins
-app.use((req, res, next) => {
-  console.log(`📍 ${req.method} ${req.path} - Origin: "${req.headers.origin || 'no-origin'}"`);
-  next();
-});
-
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (Postman, curl, same-origin in dev)
-    if (!origin) {
-      console.log('✅ CORS allowed: no-origin (Postman/curl/same-origin)');
-      return callback(null, true);
-    }
-    // Check if origin is in whitelist or is an ngrok domain
-    if (allowedOrigins.includes(origin) || origin.includes('.ngrok-free.dev') || origin.includes('.ngrok.io')) {
-      console.log(`✅ CORS allowed: ${origin}`);
-      return callback(null, true);
-    }
-    
-    // In development, be more lenient with localhost
-    const devMode = process.env.NODE_ENV !== 'production';
-    if (devMode && origin.startsWith('http://localhost:')) {
-      console.log(`✅ CORS allowed (dev mode): ${origin}`);
-      return callback(null, true);
-    }
-    
-    console.log(`❌ CORS blocked: ${origin}`);
-    console.log(`   Allowed origins: ${allowedOrigins.join(', ')}`);
-    callback(new Error(`CORS not allowed: ${origin}`));
+    // Allow same-origin requests (no origin header)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+
+    // In development, allow any localhost port
+    if (!IS_PROD && origin.startsWith('http://localhost:')) return callback(null, true);
+
+    callback(new Error('CORS not allowed'));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -47,9 +60,13 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
-// ── Body parsers ─────────────────────────────────────────────────────────────
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// ── Body parsers (with size limits) ──────────────────────────────────────────
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+// ── Input sanitization ──────────────────────────────────────────────────────
+const { sanitizeInput } = require('./middleware/sanitize');
+app.use(sanitizeInput);
 
 // ── Static files ──────────────────────────────────────────────────────────────
 // Uploaded images (products, news, etc.)
@@ -65,7 +82,7 @@ if (IS_PROD) {
 }
 
 // ── API Routes ────────────────────────────────────────────────────────────────
-app.use('/api/auth',          require('./routes/auth'));
+app.use('/api/auth', authLimiter, require('./routes/auth'));
 app.use('/api/products',      require('./routes/products'));
 app.use('/api/news',          require('./routes/news'));
 app.use('/api/reviews',       require('./routes/reviews'));
@@ -76,21 +93,11 @@ app.use('/api/carousel',      require('./routes/carousel'));
 app.use('/api/settings',      require('./routes/settings'));
 app.use('/api/products-home-images', require('./routes/productsHome'));
 
-// Initialize database endpoint (for dev setup)
-app.post('/api/init', async (req, res) => {
-  try {
-    const { execSync } = require('child_process');
-    console.log('🔧 Initializing database...');
-    execSync('node init-db.js', { cwd: __dirname, stdio: 'inherit' });
-    res.json({ success: true, message: 'Database initialized' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Database init failed: ' + error.message });
-  }
-});
+// /api/init removed for security — run `node init-db.js` manually instead
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', db: 'MySQL', env: process.env.NODE_ENV || 'development' });
+  res.json({ status: 'OK' });
 });
 
 // ── SPA fallback (production only) ──────────────────────────────────────────
@@ -108,19 +115,10 @@ app.use((err, req, res, next) => {
   console.error('❌ Error:', err.message);
   
   if (err.message?.includes('CORS')) {
-    console.error('   CORS Error - Check origin and allowed hosts');
-    return res.status(403).json({ 
-      success: false, 
-      message: err.message,
-      hint: 'CORS origin not allowed. Check backend configuration.'
-    });
+    return res.status(403).json({ success: false, message: 'Origin not allowed' });
   }
   
-  res.status(500).json({ 
-    success: false, 
-    message: 'Internal server error',
-    error: process.env.NODE_ENV !== 'production' ? err.message : undefined
-  });
+  res.status(500).json({ success: false, message: 'Internal server error' });
 });
 
 const PORT = process.env.PORT || 5000;

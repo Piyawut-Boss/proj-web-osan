@@ -1,6 +1,12 @@
-const db = require('../models/db');
+﻿const db = require('../models/db');
 const fs = require('fs');
 const path = require('path');
+
+// Safe error response â€” never leak internal details to client
+const serverError = (res, err) => {
+  console.error('Server error:', err.message);
+  return res.status(500).json({ success: false, message: 'Server error' });
+};
 
 // Delete a file safely
 const deleteFile = (filePath) => {
@@ -29,7 +35,7 @@ const toBool = (v, fallback = 1) => {
   return fallback;
 };
 
-// ── PRODUCTS ─────────────────────────────────────────────────────────────────
+// â”€â”€ PRODUCTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getAllProducts = async (req, res) => {
   try {
@@ -40,7 +46,7 @@ const getAllProducts = async (req, res) => {
     query += ' ORDER BY sort_order ASC, created_at DESC';
     const [rows] = await db.execute(query, params);
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const getAllProductsAdmin = async (req, res) => {
@@ -54,7 +60,7 @@ const getAllProductsAdmin = async (req, res) => {
     const data = rows.map(r => ({ ...r, image: buildImageUrl(r.image) }));
     res.json({ success: true, data });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    serverError(res, err);
   }
 };
 
@@ -64,7 +70,7 @@ const getProductById = async (req, res) => {
     const [rows] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
     if (!rows.length) return res.status(404).json({ success: false, message: 'Product not found' });
     res.json({ success: true, data: { ...rows[0], image: buildImageUrl(rows[0].image) } });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const createProduct = async (req, res) => {
@@ -77,7 +83,7 @@ const createProduct = async (req, res) => {
       [name, name_en || null, name_zh || null, name_ms || null, name_ar || null, category || 'psu_blen', description || null, description_en || null, description_zh || null, description_ms || null, description_ar || null, ingredients || null, weight || null, image]
     );
     res.status(201).json({ success: true, message: 'Product created', id: result.insertId });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const updateProduct = async (req, res) => {
@@ -95,7 +101,7 @@ const updateProduct = async (req, res) => {
        image, toBool(is_active, existing[0].is_active), req.params.id]
     );
     res.json({ success: true, message: 'Product updated' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const deleteProduct = async (req, res) => {
@@ -105,16 +111,16 @@ const deleteProduct = async (req, res) => {
     deleteFile(existing[0].image);
     await db.execute('DELETE FROM products WHERE id = ?', [req.params.id]);
     res.json({ success: true, message: 'Product deleted' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
-// ── NEWS ─────────────────────────────────────────────────────────────────────
+// â”€â”€ NEWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getAllNews = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM news WHERE is_published = 1 ORDER BY created_at DESC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const getNewsById = async (req, res) => {
@@ -122,14 +128,14 @@ const getNewsById = async (req, res) => {
     const [rows] = await db.execute('SELECT * FROM news WHERE id = ?', [req.params.id]);
     if (!rows.length) return res.status(404).json({ success: false, message: 'News not found' });
     res.json({ success: true, data: { ...rows[0], image: buildImageUrl(rows[0].image) } });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const getAllNewsAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM news ORDER BY created_at DESC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const createNews = async (req, res) => {
@@ -142,7 +148,7 @@ const createNews = async (req, res) => {
       [title, description || null, content || null, image, published_date || null, link_url || null, toBool(is_published, 1)]
     );
     res.status(201).json({ success: true, message: 'News created', id: result.insertId });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const updateNews = async (req, res) => {
@@ -159,7 +165,7 @@ const updateNews = async (req, res) => {
        link_url ?? existing[0].link_url, toBool(is_published, existing[0].is_published), req.params.id]
     );
     res.json({ success: true, message: 'News updated' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const deleteNews = async (req, res) => {
@@ -169,23 +175,23 @@ const deleteNews = async (req, res) => {
     deleteFile(existing[0].image);
     await db.execute('DELETE FROM news WHERE id = ?', [req.params.id]);
     res.json({ success: true, message: 'News deleted' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
-// ── REVIEWS ───────────────────────────────────────────────────────────────────
+// â”€â”€ REVIEWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getAllReviews = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM reviews WHERE is_active = 1 ORDER BY created_at DESC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const getAllReviewsAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM reviews ORDER BY created_at DESC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const getReviewById = async (req, res) => {
@@ -193,7 +199,7 @@ const getReviewById = async (req, res) => {
     const [rows] = await db.execute('SELECT * FROM reviews WHERE id = ?', [req.params.id]);
     if (!rows.length) return res.status(404).json({ success: false, message: 'Review not found' });
     res.json({ success: true, data: { ...rows[0], image: buildImageUrl(rows[0].image) } });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const createReview = async (req, res) => {
@@ -206,7 +212,7 @@ const createReview = async (req, res) => {
       [title, description || null, image, published_date || null, link_url || null]
     );
     res.status(201).json({ success: true, message: 'Review created', id: result.insertId });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const updateReview = async (req, res) => {
@@ -223,7 +229,7 @@ const updateReview = async (req, res) => {
        toBool(is_active, existing[0].is_active), req.params.id]
     );
     res.json({ success: true, message: 'Review updated' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const deleteReview = async (req, res) => {
@@ -233,16 +239,16 @@ const deleteReview = async (req, res) => {
     deleteFile(existing[0].image);
     await db.execute('DELETE FROM reviews WHERE id = ?', [req.params.id]);
     res.json({ success: true, message: 'Review deleted' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
-// ── CERTIFICATES ──────────────────────────────────────────────────────────────
+// â”€â”€ CERTIFICATES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getAllCertificates = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM certificates ORDER BY sort_order ASC, id ASC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const createCertificate = async (req, res) => {
@@ -255,7 +261,7 @@ const createCertificate = async (req, res) => {
       [title, image, parseInt(sort_order) || 0]
     );
     res.status(201).json({ success: true, message: 'Certificate created', id: result.insertId });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const updateCertificate = async (req, res) => {
@@ -270,7 +276,7 @@ const updateCertificate = async (req, res) => {
       [title || existing[0].title, image, parseInt(sort_order) ?? existing[0].sort_order, req.params.id]
     );
     res.json({ success: true, message: 'Certificate updated' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const deleteCertificate = async (req, res) => {
@@ -280,16 +286,16 @@ const deleteCertificate = async (req, res) => {
     deleteFile(existing[0].image);
     await db.execute('DELETE FROM certificates WHERE id = ?', [req.params.id]);
     res.json({ success: true, message: 'Certificate deleted' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
-// ── BOARD MEMBERS ─────────────────────────────────────────────────────────────
+// â”€â”€ BOARD MEMBERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getAllBoardMembers = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM board_members ORDER BY board_type ASC, sort_order ASC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const createBoardMember = async (req, res) => {
@@ -302,7 +308,7 @@ const createBoardMember = async (req, res) => {
       [name, position || null, board_type || 'board', image, parseInt(sort_order) || 0]
     );
     res.status(201).json({ success: true, message: 'Board member created', id: result.insertId });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const updateBoardMember = async (req, res) => {
@@ -319,7 +325,7 @@ const updateBoardMember = async (req, res) => {
        parseInt(sort_order) ?? existing[0].sort_order, req.params.id]
     );
     res.json({ success: true, message: 'Board member updated' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const deleteBoardMember = async (req, res) => {
@@ -329,23 +335,23 @@ const deleteBoardMember = async (req, res) => {
     deleteFile(existing[0].image);
     await db.execute('DELETE FROM board_members WHERE id = ?', [req.params.id]);
     res.json({ success: true, message: 'Board member deleted' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
-// ── BANNERS ───────────────────────────────────────────────────────────────────
+// â”€â”€ BANNERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getAllBanners = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM banners WHERE is_active = 1 ORDER BY sort_order ASC, id ASC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const getAllBannersAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM banners ORDER BY sort_order ASC, id DESC');
     res.json({ success: true, data: rows.map(r => ({ ...r, image: buildImageUrl(r.image) })) });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const createBanner = async (req, res) => {
@@ -357,7 +363,7 @@ const createBanner = async (req, res) => {
       [title || null, subtitle || null, image, link_url || null, parseInt(sort_order) || 0, toBool(is_active, 1)]
     );
     res.status(201).json({ success: true, message: 'Banner created', id: result.insertId });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const updateBanner = async (req, res) => {
@@ -375,7 +381,7 @@ const updateBanner = async (req, res) => {
        toBool(is_active, existing[0].is_active), req.params.id]
     );
     res.json({ success: true, message: 'Banner updated' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 const deleteBanner = async (req, res) => {
@@ -385,10 +391,10 @@ const deleteBanner = async (req, res) => {
     deleteFile(existing[0].image);
     await db.execute('DELETE FROM banners WHERE id = ?', [req.params.id]);
     res.json({ success: true, message: 'Banner deleted' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+// â”€â”€ DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const getDashboardStats = async (req, res) => {
   try {
@@ -404,7 +410,7 @@ const getDashboardStats = async (req, res) => {
       success: true,
       data: { products, news, reviews, certificates: certs, board_members: members, banners, recentNews },
     });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { serverError(res, err); }
 };
 
 module.exports = {

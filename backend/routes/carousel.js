@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const db = require('../models/db');
 const upload = require('../middleware/upload');
 const fs = require('fs');
@@ -7,17 +7,23 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Valid carousel sections whitelist
+const VALID_SECTIONS = ['hero', 'about', 'products', 'news', 'home', 'banner'];
+
 // Get carousel images for a section
 router.get('/:section', async (req, res) => {
   try {
     const { section } = req.params;
+    if (!VALID_SECTIONS.includes(section)) {
+      return res.status(400).json({ message: 'Invalid section' });
+    }
     const [images] = await db.execute(
       'SELECT id, section, image_path, sort_order, created_at FROM carousel_images WHERE section = ? ORDER BY sort_order ASC, created_at ASC',
       [section]
     );
     res.json({ data: images || [] });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch carousel images', error: err.message });
+    res.status(500).json({ message: 'Failed to fetch carousel images' });
   }
 });
 
@@ -25,6 +31,9 @@ router.get('/:section', async (req, res) => {
 router.post('/:section/add', authenticateToken, upload.single('image'), async (req, res) => {
   try {
     const { section } = req.params;
+    if (!VALID_SECTIONS.includes(section)) {
+      return res.status(400).json({ message: 'Invalid section' });
+    }
     
     if (!req.file) {
       return res.status(400).json({ message: 'No image file provided' });
@@ -51,7 +60,7 @@ router.post('/:section/add', authenticateToken, upload.single('image'), async (r
     if (req.file) {
       fs.unlink(path.join(__dirname, '../uploads', req.file.filename), () => {});
     }
-    res.status(500).json({ message: 'Failed to add carousel image', error: err.message });
+    res.status(500).json({ message: 'Failed to add carousel image' });
   }
 });
 
@@ -86,7 +95,7 @@ router.delete('/:imageId', authenticateToken, async (req, res) => {
 
     res.json({ message: 'Image deleted successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to delete image', error: err.message });
+    res.status(500).json({ message: 'Failed to delete image' });
   }
 });
 
@@ -110,7 +119,7 @@ router.put('/:section/reorder', authenticateToken, async (req, res) => {
 
     res.json({ message: 'Sort order updated successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to update sort order', error: err.message });
+    res.status(500).json({ message: 'Failed to update sort order' });
   }
 });
 

@@ -1,4 +1,4 @@
-const db = require('../models/db');
+﻿const db = require('../models/db');
 const fs = require('fs');
 const path = require('path');
 
@@ -20,7 +20,7 @@ const deleteOldFile = (val) => {
   } catch (e) { /* ignore */ }
 };
 
-// GET /api/settings — public: returns { key: value } map
+// GET /api/settings â€” public: returns { key: value } map
 const getAll = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT setting_key, setting_value, setting_type FROM site_settings ORDER BY section, id');
@@ -32,11 +32,11 @@ const getAll = async (req, res) => {
     });
     res.json({ success: true, data: out });
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
-// GET /api/settings/admin — admin: returns full rows with display_value
+// GET /api/settings/admin â€” admin: returns full rows with display_value
 const getAdmin = async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM site_settings ORDER BY section, id');
@@ -48,11 +48,11 @@ const getAdmin = async (req, res) => {
     }));
     res.json({ success: true, data: out });
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
-// PUT /api/settings/batch-update — save multiple text/textarea settings at once
+// PUT /api/settings/batch-update â€” save multiple text/textarea settings at once
 const batchUpdate = async (req, res) => {
   try {
     const { settings } = req.body;
@@ -60,15 +60,19 @@ const batchUpdate = async (req, res) => {
       return res.status(400).json({ success: false, message: 'settings object required' });
     }
     for (const [k, v] of Object.entries(settings)) {
-      await db.execute('UPDATE site_settings SET setting_value=? WHERE setting_key=?', [v, k]);
+      // Only update keys that actually exist in the database
+      const [existing] = await db.execute('SELECT id FROM site_settings WHERE setting_key=?', [k]);
+      if (existing.length > 0) {
+        await db.execute('UPDATE site_settings SET setting_value=? WHERE setting_key=?', [v, k]);
+      }
     }
     res.json({ success: true });
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
-// PUT /api/settings/:key — update a single setting (image upload or text)
+// PUT /api/settings/:key â€” update a single setting (image upload or text)
 const update = async (req, res) => {
   try {
     const { key } = req.params;
@@ -89,7 +93,7 @@ const update = async (req, res) => {
     const returnVal = rows[0].setting_type === 'image' ? toUrl(value) : value;
     res.json({ success: true, key, value: returnVal });
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 

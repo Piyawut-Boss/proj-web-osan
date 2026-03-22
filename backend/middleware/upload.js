@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 // All upload sub-directories
 const uploadDirs = [
@@ -36,7 +37,7 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, '..', folder));
   },
   filename: (req, file, cb) => {
-    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const unique = crypto.randomBytes(16).toString('hex');
     const ext = path.extname(file.originalname).toLowerCase();
     cb(null, unique + ext);
   },
@@ -54,7 +55,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 10MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
 });
 
 module.exports = upload;
