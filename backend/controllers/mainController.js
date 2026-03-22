@@ -408,9 +408,20 @@ const getDashboardStats = async (req, res) => {
     const [[{ count: banners }]]  = await db.execute('SELECT COUNT(*) as count FROM banners');
     const [recentNews]            = await db.execute('SELECT id, title, created_at FROM news ORDER BY created_at DESC LIMIT 5');
 
+    // Visitor stats
+    let visitors = { today: 0, week: 0, month: 0, total: 0, todayUnique: 0 };
+    try {
+      const [[{ c: vTotal }]]       = await db.execute('SELECT COUNT(*) as c FROM page_views');
+      const [[{ c: vToday }]]       = await db.execute('SELECT COUNT(*) as c FROM page_views WHERE DATE(visited_at) = CURDATE()');
+      const [[{ c: vTodayUnique }]] = await db.execute('SELECT COUNT(DISTINCT ip_hash) as c FROM page_views WHERE DATE(visited_at) = CURDATE()');
+      const [[{ c: vWeek }]]        = await db.execute('SELECT COUNT(*) as c FROM page_views WHERE visited_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)');
+      const [[{ c: vMonth }]]       = await db.execute('SELECT COUNT(*) as c FROM page_views WHERE visited_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)');
+      visitors = { today: vToday, week: vWeek, month: vMonth, total: vTotal, todayUnique: vTodayUnique };
+    } catch (e) { /* page_views table may not exist yet */ }
+
     res.json({
       success: true,
-      data: { products, news, reviews, certificates: certs, board_members: members, banners, recentNews },
+      data: { products, news, reviews, certificates: certs, board_members: members, banners, recentNews, visitors },
     });
   } catch (err) { serverError(res, err); }
 };

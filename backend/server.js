@@ -81,6 +81,48 @@ if (IS_PROD) {
   }
 }
 
+// ── Auto-create page_views table ─────────────────────────────────────────────
+const db = require('./models/db');
+(async () => {
+  try {
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS page_views (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        page VARCHAR(255) NOT NULL DEFAULT '/',
+        ip_hash VARCHAR(64) NOT NULL,
+        visited_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_visited_at (visited_at),
+        INDEX idx_page (page)
+      )
+    `);
+  } catch (e) { console.error('page_views table init:', e.message); }
+})();
+
+// ── Visitor tracking (public pages only, no auth routes) ─────────────────────
+const crypto = require('crypto');
+app.use((req, res, next) => {
+  // Only track GET requests to public API endpoints and the root page
+  if (req.method !== 'GET') return next();
+  const p = req.path;
+  // Track public content endpoints (not admin, not uploads, not health)
+  const isPublicApi = p.startsWith('/api/') && !p.includes('/admin/') && !p.includes('/auth/');
+  const isPage = p === '/' || (p.length > 1 && !p.startsWith('/api/') && !p.startsWith('/uploads/'));
+  if (!isPublicApi && !isPage) return next();
+
+  // Hash IP for privacy (no raw IPs stored)
+  const raw = (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim();
+  const ipHash = crypto.createHash('sha256').update(raw + (req.headers['user-agent'] || '')).digest('hex').substring(0, 16);
+  const page = p.split('?')[0].substring(0, 255);
+
+  // Fire-and-forget — don't block the response
+  db.execute(
+    'INSERT INTO page_views (page, ip_hash, visited_at) VALUES (?, ?, NOW())',
+    [page, ipHash]
+  ).catch(() => {});
+
+  next();
+});
+
 // ── API Routes ────────────────────────────────────────────────────────────────
 app.use('/api/auth', authLimiter, require('./routes/auth'));
 app.use('/api/products',      require('./routes/products'));

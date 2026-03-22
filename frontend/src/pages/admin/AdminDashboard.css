@@ -156,3 +156,85 @@
   .stats-grid { grid-template-columns: 1fr; }
   .quick-grid { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   VISITOR STATS BANNER
+   ══════════════════════════════════════════════════════════ */
+.visitor-banner {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e5e9f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+.visitor-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e9ecf2;
+}
+.visitor-banner-icon { font-size: 1.3rem; }
+.visitor-banner-header h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+.visitor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.visitor-card {
+  background: #f6f8fb;
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid #e5e9f0;
+  transition: all .2s;
+}
+.visitor-card:hover {
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+.visitor-card-total {
+  background: linear-gradient(135deg, #0a1628 0%, #1a2d6b 100%);
+  border-color: transparent;
+  color: #fff;
+}
+.visitor-card-total:hover {
+  background: linear-gradient(135deg, #0d1f3e 0%, #1f3580 100%);
+  border-color: transparent;
+}
+.visitor-card-total .visitor-num { color: #4da6ff; }
+.visitor-card-total .visitor-label { color: rgba(255,255,255,.7); }
+.visitor-card-total .visitor-sub { color: rgba(255,255,255,.4); }
+.visitor-num {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1;
+  letter-spacing: -.5px;
+}
+.visitor-label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text-medium);
+}
+.visitor-sub {
+  font-size: .72rem;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+@media (max-width: 700px) {
+  .visitor-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 400px) {
+  .visitor-grid { grid-template-columns: 1fr; }
+}

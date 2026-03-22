@@ -27,6 +27,8 @@ const AdminDashboard = () => {
     { icon: '🖼️', label: 'แบนเนอร์', count: stats.banners, link: '/admin/banners', color: '#1abc9c' },
   ] : [];
 
+  const v = stats?.visitors || {};
+
   return (
     <div className="dashboard">
       <div className="page-header">
@@ -41,6 +43,34 @@ const AdminDashboard = () => {
         <div className="loading-spinner"><div className="spinner" /></div>
       ) : (
         <>
+          {/* ── Visitor Stats ── */}
+          <div className="visitor-banner">
+            <div className="visitor-banner-header">
+              <span className="visitor-banner-icon">👁️</span>
+              <h2>สถิติผู้เข้าชมเว็บไซต์</h2>
+            </div>
+            <div className="visitor-grid">
+              <div className="visitor-card">
+                <span className="visitor-num">{(v.todayUnique || 0).toLocaleString()}</span>
+                <span className="visitor-label">ผู้เข้าชมวันนี้</span>
+                <span className="visitor-sub">{(v.today || 0).toLocaleString()} pageviews</span>
+              </div>
+              <div className="visitor-card">
+                <span className="visitor-num">{(v.week || 0).toLocaleString()}</span>
+                <span className="visitor-label">7 วันล่าสุด</span>
+              </div>
+              <div className="visitor-card">
+                <span className="visitor-num">{(v.month || 0).toLocaleString()}</span>
+                <span className="visitor-label">30 วันล่าสุด</span>
+              </div>
+              <div className="visitor-card visitor-card-total">
+                <span className="visitor-num">{(v.total || 0).toLocaleString()}</span>
+                <span className="visitor-label">ทั้งหมด</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Content Stats ── */}
           <div className="stats-grid">
             {STAT_CARDS.map(s => (
               <Link to={s.link} key={s.label} className="stat-card">
