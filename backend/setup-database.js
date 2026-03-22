@@ -171,12 +171,12 @@ async function setupDatabase() {
     // Check and create admin
     const [admins] = await connection.execute('SELECT COUNT(*) as count FROM admins');
     if (admins[0].count === 0) {
-      // Default admin password: admin123 (bcrypt hashed)
+      // Default admin (bcrypt hashed, 12 rounds)
       await connection.execute(
         "INSERT INTO admins (username, password) VALUES (?, ?)",
-        ['admin', '$2b$12$/U8wA8wM4UNh0D780Bd.huD7Wdy5RZnTmMWVckeRgCnCZ06CdUY46']
+        ['psuadmin', '$2b$12$unurNlOuKhfV3vcXMu0EY.kUrDXKJQCDZlLCIPeVBW8.D4cBTog7e']
       );
-      console.log('   ✅ Admin user created (username: admin, password: admin123)');
+      console.log('   ✅ Admin user created (username: psuadmin)');
     } else {
       console.log('   ⚠️  Admin user already exists');
     }
