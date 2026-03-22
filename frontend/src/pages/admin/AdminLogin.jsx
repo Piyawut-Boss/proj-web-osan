@@ -83,7 +83,7 @@ const AdminLogin = () => {
             </div>
 
             <button type="submit" className="btn btn-primary login-submit" disabled={loading}>
-              {loading ? '⏳ กำลังเข้าสู่ระบบ...' : '🔐 เข้าสู่ระบบ'}
+              {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
             </button>
           </form>
         </div>

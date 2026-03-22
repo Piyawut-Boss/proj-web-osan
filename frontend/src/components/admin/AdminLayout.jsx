@@ -3,14 +3,14 @@ import { useAuth } from '../../context/AuthContext';
 import './AdminLayout.css';
 
 const navItems = [
-  { to:'/admin', label:'📊 แดชบอร์ด', end:true },
-  { to:'/admin/products', label:'📦 สินค้า' },
-  { to:'/admin/news', label:'📰 ข่าวสาร' },
-  { to:'/admin/reviews', label:'⭐ รีวิว' },
-  { to:'/admin/certificates', label:'📜 ใบรับรอง' },
-  { to:'/admin/board-members', label:'👥 คณะกรรมการ' },
-  { to:'/admin/banners', label:'🖼️ แบนเนอร์' },
-  { to:'/admin/settings', label:'⚙️ ตั้งค่าเว็บไซต์' },
+  { to:'/admin', label:'แดชบอร์ด', end:true },
+  { to:'/admin/products', label:'สินค้า' },
+  { to:'/admin/news', label:'ข่าวสาร' },
+  { to:'/admin/reviews', label:'รีวิว' },
+  { to:'/admin/certificates', label:'ใบรับรอง' },
+  { to:'/admin/board-members', label:'คณะกรรมการ' },
+  { to:'/admin/banners', label:'แบนเนอร์' },
+  { to:'/admin/settings', label:'ตั้งค่าเว็บไซต์' },
 ];
 
 export default function AdminLayout() {
@@ -34,14 +34,14 @@ export default function AdminLayout() {
           ))}
         </nav>
         <div className="sidebar-footer">
-          <p className="sidebar-user">👤 {user?.username || 'Admin'}</p>
+          <p className="sidebar-user">{user?.username || 'Admin'}</p>
           <button className="btn btn-danger btn-sm" onClick={handleLogout}>ออกจากระบบ</button>
         </div>
       </aside>
       <main className="admin-main">
         <div className="admin-topbar">
           <h2 className="topbar-title">PSU AGRO FOOD — Admin CMS</h2>
-          <a href="/" target="_blank" rel="noreferrer" className="topbar-preview">🌐 ดูเว็บไซต์</a>
+          <a href="/" target="_blank" rel="noreferrer" className="topbar-preview">ดูเว็บไซต์</a>
         </div>
         <div className="admin-content">
           <Outlet />

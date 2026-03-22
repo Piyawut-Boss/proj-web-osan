@@ -104,7 +104,7 @@ export default function CarouselManager({ section, label, onAlert }) {
       <div className="carousel-header">
         <h3>{label}</h3>
         <label className="btn btn-secondary" style={{cursor:'pointer'}}>
-          📷 {uploading ? 'Uploading...' : 'Add Image'}
+          {uploading ? 'Uploading...' : 'Add Image'}
           <input
             type="file"
             accept="image/*"
@@ -117,7 +117,7 @@ export default function CarouselManager({ section, label, onAlert }) {
 
       {images.length === 0 ? (
         <div style={{padding:'40px 20px',textAlign:'center',color:'var(--text-light)'}}>
-          📷 No images yet. Click "Add Image" to create your carousel.
+          No images yet. Click "Add Image" to create your carousel.
         </div>
       ) : (
         <div className="carousel-grid">

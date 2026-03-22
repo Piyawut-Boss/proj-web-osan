@@ -26,7 +26,7 @@ const ImgField = ({preview,onChange}) => (
   <div className="form-group">
     <label className="form-label">รูปภาพ</label>
     <div className="image-upload-area">
-      {preview ? <img src={preview} alt="preview" className="image-preview"/> : <div className="image-upload-placeholder"><span>📷</span><p>คลิกเพื่ออัปโหลด</p></div>}
+      {preview ? <img src={preview} alt="preview" className="image-preview"/> : <div className="image-upload-placeholder"><p>คลิกเพื่ออัปโหลด</p></div>}
       <input type="file" accept="image/*" onChange={onChange} className="image-input"/>
     </div>
   </div>
@@ -62,7 +62,7 @@ export const AdminReviews = () => {
   ];
   return (
     <div className="admin-page">
-      <div className="page-header"><div><h1>จัดการรีวิว</h1></div><button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มรีวิว</button></div>
+      <div className="page-header"><div><h1>จัดการรีวิว</h1></div><button className="btn btn-primary" onClick={openCreate}>เพิ่มรีวิว</button></div>
       {alert&&<div className={`alert alert-${alert.t}`}>{alert.m}</div>}
       <div className="page-content"><AdminTable columns={cols} data={data} onEdit={openEdit} onDelete={del} loading={loading}/></div>
       <AdminModal isOpen={open} onClose={()=>setOpen(false)} title={editing?'แก้ไขรีวิว':'เพิ่มรีวิวใหม่'}>
@@ -104,7 +104,7 @@ export const AdminNews = () => {
   ];
   return (
     <div className="admin-page">
-      <div className="page-header"><div><h1>จัดการข่าวสาร</h1></div><button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มข่าวสาร</button></div>
+      <div className="page-header"><div><h1>จัดการข่าวสาร</h1></div><button className="btn btn-primary" onClick={openCreate}>เพิ่มข่าวสาร</button></div>
       {alert&&<div className={`alert alert-${alert.t}`}>{alert.m}</div>}
       <div className="page-content"><AdminTable columns={cols} data={data} onEdit={openEdit} onDelete={del} loading={loading}/></div>
       <AdminModal isOpen={open} onClose={()=>setOpen(false)} title={editing?'แก้ไขข่าวสาร':'เพิ่มข่าวสารใหม่'} size="lg">
@@ -147,7 +147,7 @@ export const AdminCertificates = () => {
   ];
   return (
     <div className="admin-page">
-      <div className="page-header"><div><h1>จัดการใบรับรองมาตรฐาน</h1></div><button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มใบรับรอง</button></div>
+      <div className="page-header"><div><h1>จัดการใบรับรองมาตรฐาน</h1></div><button className="btn btn-primary" onClick={openCreate}>เพิ่มใบรับรอง</button></div>
       {alert&&<div className={`alert alert-${alert.t}`}>{alert.m}</div>}
       <div className="page-content"><AdminTable columns={cols} data={data} onEdit={openEdit} onDelete={del} loading={loading}/></div>
       <AdminModal isOpen={open} onClose={()=>setOpen(false)} title={editing?'แก้ไขใบรับรอง':'เพิ่มใบรับรองใหม่'}>
@@ -195,14 +195,14 @@ export const AdminBanners = () => {
   ];
   return (
     <div className="admin-page">
-      <div className="page-header"><div><h1>จัดการแบนเนอร์</h1></div><button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มแบนเนอร์</button></div>
+      <div className="page-header"><div><h1>จัดการแบนเนอร์</h1></div><button className="btn btn-primary" onClick={openCreate}>เพิ่มแบนเนอร์</button></div>
       {alert&&<div className={`alert alert-${alert.t}`}>{alert.m}</div>}
       <div className="page-content"><AdminTable columns={cols} data={data} onEdit={openEdit} onDelete={del} loading={loading}/></div>
       <AdminModal isOpen={open} onClose={()=>setOpen(false)} title={editing?'แก้ไขแบนเนอร์':'เพิ่มแบนเนอร์ใหม่'}>
         <form onSubmit={submit}>
           <div className="form-group"><label className="form-label">รูปแบนเนอร์</label>
             <div className="image-upload-area" style={{height:180}}>
-              {imgPrev?<img src={imgPrev} alt="preview" className="image-preview"/>:<div className="image-upload-placeholder"><span>🖼️</span><p>คลิกเพื่ออัปโหลด (แนะนำ 1920×600)</p></div>}
+              {imgPrev?<img src={imgPrev} alt="preview" className="image-preview"/>:<div className="image-upload-placeholder"><p>คลิกเพื่ออัปโหลด (แนะนำ 1920×600)</p></div>}
               <input type="file" accept="image/*" onChange={e=>{const f=e.target.files[0];if(f){setImgFile(f);setImgPrev(URL.createObjectURL(f))}}} className="image-input"/>
             </div>
           </div>
@@ -244,7 +244,7 @@ export const AdminBoardMembers = () => {
   ];
   return (
     <div className="admin-page">
-      <div className="page-header"><div><h1>จัดการคณะกรรมการ</h1></div><button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มคณะกรรมการ</button></div>
+      <div className="page-header"><div><h1>จัดการคณะกรรมการ</h1></div><button className="btn btn-primary" onClick={openCreate}>เพิ่มคณะกรรมการ</button></div>
       {alert&&<div className={`alert alert-${alert.t}`}>{alert.m}</div>}
       <div className="page-content"><AdminTable columns={cols} data={data} onEdit={openEdit} onDelete={del} loading={loading}/></div>
       <AdminModal isOpen={open} onClose={()=>setOpen(false)} title={editing?'แก้ไขคณะกรรมการ':'เพิ่มคณะกรรมการใหม่'}>

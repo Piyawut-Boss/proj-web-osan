@@ -5,20 +5,20 @@ import { invalidateSettings } from '../../hooks/useSettings';
 import './AdminPages.css';
 
 const SECTIONS = [
-  { key:'hero', label:'🏠 Hero Banner' },
-  { key:'showcase', label:'🥛 PSU Blen Showcase' },
-  { key:'mealbox', label:'🍱 อาหารกล่อง' },
-  { key:'accordion', label:'❓ Why PSU Blend' },
-  { key:'today', label:'📰 PSU Agro Food Today' },
-  { key:'oem', label:'🏭 บริการ OEM' },
-  { key:'products', label:'📦 Products Page Banner' },
-  { key:'vision', label:'🎯 วิสัยทัศน์' },
-  { key:'mission', label:'🤝 พันธกิจ' },
-  { key:'core_values', label:'💎 ค่านิยม' },
-  { key:'timeline', label:'📅 Timeline' },
-  { key:'partners', label:'🤝 รูปพาร์ทเนอร์' },
-  { key:'contact', label:'📞 ติดต่อเรา' },
-  { key:'footer', label:'📋 Footer' },
+  { key:'hero', label:'Hero Banner' },
+  { key:'showcase', label:'PSU Blen Showcase' },
+  { key:'mealbox', label:'อาหารกล่อง' },
+  { key:'accordion', label:'Why PSU Blend' },
+  { key:'today', label:'PSU Agro Food Today' },
+  { key:'oem', label:'บริการ OEM' },
+  { key:'products', label:'Products Page Banner' },
+  { key:'vision', label:'วิสัยทัศน์' },
+  { key:'mission', label:'พันธกิจ' },
+  { key:'core_values', label:'ค่านิยม' },
+  { key:'timeline', label:'Timeline' },
+  { key:'partners', label:'รูปพาร์ทเนอร์' },
+  { key:'contact', label:'ติดต่อเรา' },
+  { key:'footer', label:'Footer' },
 ];
 
 export default function AdminSettings() {
@@ -80,7 +80,7 @@ export default function AdminSettings() {
       invalidateSettings();
       setImageFiles({});
       load();
-      showAlert('บันทึกสำเร็จ ✓');
+      showAlert('บันทึกสำเร็จ');
     } catch(e) {
       showAlert('เกิดข้อผิดพลาด: ' + (e.response?.data?.message || e.message || 'ไม่ทราบสาเหตุ'), 'error');
     } finally {
@@ -93,9 +93,9 @@ export default function AdminSettings() {
   return (
     <div className="admin-page">
       <div className="page-header">
-        <div><h1>⚙️ ตั้งค่าเนื้อหาเว็บไซต์</h1><p>แก้ไขข้อความและรูปภาพทุกส่วนของเว็บไซต์</p></div>
+        <div><h1>ตั้งค่าเนื้อหาเว็บไซต์</h1><p>แก้ไขข้อความและรูปภาพทุกส่วนของเว็บไซต์</p></div>
         <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-          {saving ? '⏳ กำลังบันทึก...' : '💾 บันทึกทั้งหมด'}
+          {saving ? 'กำลังบันทึก...' : 'บันทึกทั้งหมด'}
         </button>
       </div>
 
@@ -119,7 +119,7 @@ export default function AdminSettings() {
           {['hero', 'products'].includes(activeSection) && (
             <CarouselManager 
               section={activeSection}
-              label={activeSection === 'hero' ? '🎬 Slide Banner' : '📸 Slide Banner'}
+              label={activeSection === 'hero' ? 'Slide Banner' : 'Slide Banner'}
               onAlert={showAlert}
             />
           )}
@@ -145,15 +145,15 @@ export default function AdminSettings() {
                     {(imagePreviews[s.setting_key] || s.display_value) ? (
                       <img src={imagePreviews[s.setting_key] || s.display_value} alt={s.label}/>
                     ) : (
-                      <div className="settings-img-ph">🖼️<span>ยังไม่มีรูป</span></div>
+                      <div className="settings-img-ph"><span>ยังไม่มีรูป</span></div>
                     )}
                   </div>
                   <div className="settings-img-actions">
                     <label className="btn btn-secondary" style={{cursor:'pointer'}}>
-                      📷 เลือกรูปภาพ
+                      เลือกรูปภาพ
                       <input type="file" accept="image/*" style={{display:'none'}} onChange={e => handleImage(s.setting_key, e.target.files[0])}/>
                     </label>
-                    {imageFiles[s.setting_key] && <span style={{fontSize:'.8rem',color:'var(--accent)'}}>✓ เลือกรูปแล้ว</span>}
+                    {imageFiles[s.setting_key] && <span style={{fontSize:'.8rem',color:'var(--accent)'}}>เลือกรูปแล้ว</span>}
                     {s.display_value && !imageFiles[s.setting_key] && (
                       <a href={s.display_value} target="_blank" rel="noreferrer" style={{fontSize:'.78rem',color:'var(--secondary)'}}>ดูรูปปัจจุบัน</a>
                     )}
@@ -172,7 +172,7 @@ export default function AdminSettings() {
           {sectionSettings.length > 0 && (
             <div style={{marginTop:20,paddingTop:20,borderTop:'1px solid var(--border)'}}>
               <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-                {saving ? '⏳ กำลังบันทึก...' : '💾 บันทึกส่วนนี้'}
+                {saving ? 'กำลังบันทึก...' : 'บันทึกส่วนนี้'}
               </button>
             </div>
           )}

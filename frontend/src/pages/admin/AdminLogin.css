@@ -5,7 +5,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f0f2f5;
+  background: var(--bg);
 }
 
 /* ── Navbar ──────────────────────────────────────────── */
@@ -54,14 +54,14 @@
   align-items: center;
   justify-content: center;
   padding: 40px 16px;
-  background: linear-gradient(160deg, #f0f2f5 0%, #e4eaf5 50%, #dfe6f3 100%);
+  background: linear-gradient(160deg, var(--bg) 0%, #e8efff 50%, #f0f4ff 100%);
 }
 
 /* ── Login Card ──────────────────────────────────────── */
 .login-card {
   background: #fff;
   border-radius: 20px;
-  border: 1px solid rgba(229,233,240,.6);
+  border: 1px solid rgba(226,232,240,.6);
   box-shadow: 0 20px 60px rgba(0,0,0,.08), 0 0 0 1px rgba(255,255,255,.8) inset;
   padding: 48px 44px;
   width: 100%;

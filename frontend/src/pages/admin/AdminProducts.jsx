@@ -72,7 +72,7 @@ const AdminProducts = () => {
       } else {
         await api.post('products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
-      showAlert(editing ? 'อัปเดตผลิตภัณฑ์สำเร็จ ✓' : 'เพิ่มผลิตภัณฑ์สำเร็จ ✓');
+      showAlert(editing ? 'อัปเดตผลิตภัณฑ์สำเร็จ' : 'เพิ่มผลิตภัณฑ์สำเร็จ');
       setModalOpen(false);
       fetchData();
     } catch (err) {
@@ -97,7 +97,7 @@ const AdminProducts = () => {
     { key: 'weight', label: 'น้ำหนัก', render: (v) => v || '—' },
     { key: 'is_active', label: 'สถานะ', render: (v) =>
       <span className={`badge ${(v === 1 || v === true) ? 'badge-accent' : 'badge-primary'}`}>
-        {(v === 1 || v === true) ? '✓ เผยแพร่' : '✗ ซ่อน'}
+        {(v === 1 || v === true) ? 'เผยแพร่' : 'ซ่อน'}
       </span> },
   ];
 
@@ -105,7 +105,7 @@ const AdminProducts = () => {
     <div className="admin-page">
       <div className="page-header">
         <div><h1>จัดการผลิตภัณฑ์</h1><p>เพิ่ม แก้ไข ลบผลิตภัณฑ์</p></div>
-        <button className="btn btn-primary" onClick={openCreate}>➕ เพิ่มผลิตภัณฑ์</button>
+        <button className="btn btn-primary" onClick={openCreate}>เพิ่มผลิตภัณฑ์</button>
       </div>
 
       {alert && <div className={`alert alert-${alert.type}`}>{alert.msg}</div>}
@@ -122,7 +122,7 @@ const AdminProducts = () => {
             <div className="image-upload-area">
               {imagePreview
                 ? <img src={imagePreview.startsWith('blob:') ? imagePreview : getImageUrl(imagePreview)} alt="preview" className="image-preview" />
-                : <div className="image-upload-placeholder"><span>📷</span><p>คลิกเพื่ออัปโหลดรูป</p></div>}
+                : <div className="image-upload-placeholder"><p>คลิกเพื่ออัปโหลดรูป</p></div>}
               <input type="file" accept="image/*" onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImagePreview(URL.createObjectURL(f)); } }} className="image-input" />
             </div>
           </div>
@@ -173,7 +173,7 @@ const AdminProducts = () => {
           </div>
           <div className="modal-actions">
             <button type="button" className="btn btn-secondary" onClick={() => setModalOpen(false)}>ยกเลิก</button>
-            <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'กำลังบันทึก...' : '💾 บันทึก'}</button>
+            <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'กำลังบันทึก...' : 'บันทึก'}</button>
           </div>
         </form>
       </AdminModal>
