@@ -36,8 +36,8 @@ async function runTests() {
   // 1. LOGIN TEST
   if (await test('1. Admin Login', async () => {
     const res = await axios.post(`${API}/auth/login`, {
-      username: 'admin',
-      password: 'admin123'
+      username: process.env.ADMIN_USER || 'psuadmin',
+      password: process.env.ADMIN_PASS || 'PsuAgro@2026!'
     });
     token = res.data.token;
     if (!token) throw new Error('No token returned');
@@ -309,8 +309,8 @@ async function runTests() {
   // 11. ADVANCED TESTS
   if (await test('30. Change Password', async () => {
     const res = await axios.put(`${API}/auth/change-password`, {
-      currentPassword: 'admin123',
-      newPassword: 'admin123'  // Change back to same password
+      currentPassword: process.env.ADMIN_PASS || 'PsuAgro@2026!',
+      newPassword: process.env.ADMIN_PASS || 'PsuAgro@2026!'  // Keep same password
     }, {
       headers: { 'Authorization': `Bearer ${token}` }
     });

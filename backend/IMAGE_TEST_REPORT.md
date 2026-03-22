@@ -162,7 +162,7 @@ Features: Real-time loading status, image preview
 ### **Actual Application:**
 ```
 Frontend: http://localhost:5173
-Admin Panel: Login with admin/admin123
+Admin Panel: Login with psuadmin / (your password)
 Pages to test images:
   - Admin Dashboard → Products
   - Admin Dashboard → Certificates  

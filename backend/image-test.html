@@ -197,7 +197,7 @@
         const loginRes = await fetch(`${API}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: 'admin', password: 'admin123' })
+          body: JSON.stringify({ username: 'psuadmin', password: prompt('Enter admin password:') })
         });
         const { token } = await loginRes.json();
 

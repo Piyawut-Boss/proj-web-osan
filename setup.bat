@@ -109,6 +109,6 @@ echo.
 echo 📱 Access the application:
 echo    Frontend: http://localhost:5173/
 echo    Backend:  http://localhost:5000/
-echo    Admin:    http://localhost:5173/admin (admin / admin123)
+echo    Admin:    http://localhost:5173/admin
 echo.
 pause

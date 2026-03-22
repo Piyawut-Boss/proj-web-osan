@@ -25,8 +25,8 @@ async function testImages() {
     // Login as admin
     console.log('🔐 Logging in as admin...');
     const loginRes = await axios.post(`${API}/auth/login`, {
-      username: 'admin',
-      password: 'admin123'
+      username: process.env.ADMIN_USER || 'psuadmin',
+      password: process.env.ADMIN_PASS || 'PsuAgro@2026!'
     });
     adminToken = loginRes.data.token;
     console.log('✅ Login successful\n');

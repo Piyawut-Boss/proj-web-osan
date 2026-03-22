@@ -17,8 +17,8 @@ CREATE TABLE admins (
   password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
--- password: admin123
-INSERT INTO admins (username, password) VALUES ('admin', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4tbqIi4rme');
+-- Default admin: psuadmin (password hashed with bcrypt)
+INSERT INTO admins (username, password) VALUES ('psuadmin', '$2b$12$unurNlOuKhfV3vcXMu0EY.kUrDXKJQCDZlLCIPeVBW8.D4cBTog7e');
 
 CREATE TABLE banners (
   id INT AUTO_INCREMENT PRIMARY KEY,

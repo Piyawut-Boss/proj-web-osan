@@ -164,8 +164,8 @@ VITE v... ready in ... ms
 - **Frontend**: http://localhost:5173/
 - **Backend API**: http://localhost:5000/api/
 - **Admin Dashboard**: http://localhost:5173/admin
-  - Username: `admin`
-  - Password: `admin123`
+  - Username: `psuadmin`
+  - Password: (set during setup)
 
 ## Troubleshooting
 
@@ -254,7 +254,7 @@ The setup creates the following tables:
 
 The setup initializes:
 
-- **1 Admin User**: username `admin` / password `admin123`
+- **1 Admin User**: username `psuadmin` (password bcrypt hashed)
 - **11 Products**:
   - 3 PSU Blen products (350g, 200g, 150g)
   - 4 Meal Box products

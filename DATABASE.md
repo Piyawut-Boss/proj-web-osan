@@ -30,7 +30,7 @@ CREATE TABLE admins (
 **Sample Data:**
 | username | password_default | notes |
 |----------|------------------|-------|
-| admin | admin123 | Default admin user |
+| psuadmin | (bcrypt hashed) | Default admin user |
 
 ---
 

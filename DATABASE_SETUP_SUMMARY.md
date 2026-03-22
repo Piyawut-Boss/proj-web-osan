@@ -45,7 +45,7 @@ npm run setup-db
 The heart of the system. Automatically:
 - ✅ Creates MySQL database (`psu_agro_food`)
 - ✅ Creates 8 database tables with proper schema
-- ✅ Initializes admin user (admin / admin123)
+- ✅ Initializes admin user (psuadmin / hashed password)
 - ✅ Seeds 11 products (3 PSU Blen, 4 Meal Box, 4 OEM)
 - ✅ Seeds 3 certificates
 - ✅ Seeds 8 board members  
@@ -166,8 +166,8 @@ MySQL Database: psu_agro_food
 ```
 
 ### Default Admin Credentials
-- **Username:** admin
-- **Password:** admin123
+- **Username:** psuadmin
+- **Password:** (set during setup, bcrypt hashed)
 - ⚠️ Should be changed after first login
 
 ### Directory Structure Created

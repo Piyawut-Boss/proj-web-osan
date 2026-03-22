@@ -6,8 +6,8 @@ async function debugImages() {
   try {
     // Login
     const loginRes = await axios.post(`${API}/auth/login`, {
-      username: 'admin',
-      password: 'admin123'
+      username: process.env.ADMIN_USER || 'psuadmin',
+      password: process.env.ADMIN_PASS || 'PsuAgro@2026!'
     });
     const token = loginRes.data.token;
 

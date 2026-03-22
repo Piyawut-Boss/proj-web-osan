@@ -56,8 +56,8 @@ npm run dev
 |-----|---------|
 | http://localhost:5173 | Website |
 | http://localhost:5173/admin | Admin Panel |
-| Username | admin |
-| Password | admin123 |
+| Username | psuadmin |
+| Password | (see setup output) |
 
 ## 🆘 Quick Troubleshooting
 
@@ -92,7 +92,7 @@ node backend/setup-database.js
 ## ✅ What Gets Set Up
 
 - ✅ MySQL database with 8 tables
-- ✅ Admin user (admin / admin123)
+- ✅ Admin user (psuadmin / hashed password)
 - ✅ 11 sample products
 - ✅ 3 certificates
 - ✅ 8 board members

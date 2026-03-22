@@ -18,7 +18,7 @@ npm install
 npm run dev       # http://localhost:5173
 ```
 
-**Admin:** `http://localhost:5173/admin/login` → `admin` / `admin123`
+**Admin:** `http://localhost:5173/admin/login` → credentials in `.env` or set during setup
 
 **Note:** Database is auto-initialized on first `npm install`. If needed manually:
 ```bash
@@ -167,7 +167,7 @@ FRONTEND_URL=http://localhost:5173
 - **Auto-created** on first server start
 - **Backup:** copy `backend/database.sqlite`
 - **Reset:** delete `database.sqlite`, restart server → fresh seed data
-- **Default login:** `admin` / `admin123` (change after first login!)
+- **Default login:** `psuadmin` (change password after first login!)
 
 ---
 
