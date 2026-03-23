@@ -100,7 +100,7 @@ export const AdminNews = () => {
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt=""/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'title',label:'หัวข้อ'},
     {key:'published_date',label:'วันที่',render:v=>v?new Date(v).toLocaleDateString('th-TH'):'—'},
-    {key:'is_published',label:'สถานะ',render:v=><span className={`badge ${v?'badge-accent':'badge-primary'}`}>{v?'เผยแพร่':'ร่าง'}</span>},
+    {key:'description',label:'รายละเอียด',render:v=>v||'—'},
   ];
   return (
     <div className="admin-page">

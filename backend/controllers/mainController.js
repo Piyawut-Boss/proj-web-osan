@@ -163,7 +163,7 @@ const updateNews = async (req, res) => {
     await db.execute(
       'UPDATE news SET title=?, description=?, content=?, image=?, published_date=?, link_url=?, is_published=? WHERE id=?',
       [title || existing[0].title, description ?? existing[0].description,
-       content ?? existing[0].content, image, published_date ?? existing[0].published_date,
+       content ?? existing[0].content, image, published_date || existing[0].published_date || null,
        link_url ?? existing[0].link_url, toBool(is_published, existing[0].is_published), req.params.id]
     );
     res.json({ success: true, message: 'News updated' });

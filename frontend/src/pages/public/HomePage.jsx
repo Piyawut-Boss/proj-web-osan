@@ -83,12 +83,13 @@ export default function HomePage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="hp-hero">
-        <img
-          src={heroBg}
-          alt="PSU AGRO FOOD"
-          className="hp-hero-full-img"
-          onError={e => { e.target.style.display = 'none'; }}
-        />
+        {heroImages[idx]?.link_url ? (
+          <a href={heroImages[idx].link_url} target="_blank" rel="noopener noreferrer" style={{display:'block',width:'100%',height:'100%'}}>
+            <img src={heroBg} alt="PSU AGRO FOOD" className="hp-hero-full-img" onError={e => { e.target.style.display = 'none'; }}/>
+          </a>
+        ) : (
+          <img src={heroBg} alt="PSU AGRO FOOD" className="hp-hero-full-img" onError={e => { e.target.style.display = 'none'; }}/>
+        )}
         {heroImages.length > 1 && (
           <div className="hp-dots">
             {heroImages.map((_, i) => (
