@@ -2,6 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../models/db');
 
+// ── Security constants ───────────────────────────────────────────────────────
+const MAX_FAILED_ATTEMPTS = 10;
+const LOCKOUT_MINUTES = 15;
+const TOKEN_EXPIRES = process.env.JWT_EXPIRES_IN || '2h';
+const REFRESH_WINDOW_MINUTES = 30; // allow refresh when < 30 min left
+
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -17,26 +23,73 @@ const login = async (req, res) => {
     }
 
     const admin = rows[0];
+
+    // Check account lockout
+    if (admin.locked_until && new Date(admin.locked_until) > new Date()) {
+      const remaining = Math.ceil((new Date(admin.locked_until) - new Date()) / 60000);
+      return res.status(423).json({
+        success: false,
+        message: `บัญชีถูกล็อก กรุณาลองใหม่ใน ${remaining} นาที`
+      });
+    }
+
     const isValidPassword = await bcrypt.compare(password, admin.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+      // Increment failed attempts
+      const attempts = (admin.failed_attempts || 0) + 1;
+      const updates = attempts >= MAX_FAILED_ATTEMPTS
+        ? 'failed_attempts = ?, locked_until = DATE_ADD(NOW(), INTERVAL ? MINUTE)'
+        : 'failed_attempts = ?';
+      const params = attempts >= MAX_FAILED_ATTEMPTS
+        ? [attempts, LOCKOUT_MINUTES, admin.id]
+        : [attempts, admin.id];
+      await db.execute(`UPDATE admins SET ${updates} WHERE id = ?`, params);
+
+      const attemptsLeft = MAX_FAILED_ATTEMPTS - attempts;
+      return res.status(401).json({
+        success: false,
+        message: attemptsLeft > 0
+          ? 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
+          : `ล็อกอินผิดหลายครั้ง บัญชีถูกล็อก ${LOCKOUT_MINUTES} นาที`
+      });
     }
+
+    // Reset failed attempts on successful login
+    await db.execute(
+      'UPDATE admins SET failed_attempts = 0, locked_until = NULL, last_login = NOW() WHERE id = ?',
+      [admin.id]
+    );
 
     const token = jwt.sign(
       { id: admin.id, username: admin.username, role: admin.role },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { expiresIn: TOKEN_EXPIRES }
     );
 
     res.json({
       success: true,
       message: 'Login successful',
       token,
+      expiresIn: TOKEN_EXPIRES,
       user: { id: admin.id, username: admin.username, role: admin.role }
     });
   } catch (error) {
     console.error('Login error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// ── Refresh token (issue new token if current is still valid) ────────────────
+const refreshToken = async (req, res) => {
+  try {
+    const token = jwt.sign(
+      { id: req.user.id, username: req.user.username, role: req.user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: TOKEN_EXPIRES }
+    );
+    res.json({ success: true, token, expiresIn: TOKEN_EXPIRES });
+  } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
@@ -78,4 +131,4 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = { login, getProfile, changePassword };
+module.exports = { login, getProfile, changePassword, refreshToken };

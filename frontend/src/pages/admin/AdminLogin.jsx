@@ -16,12 +16,15 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
     const result = await login(form.username, form.password);
     setLoading(false);
-    if (result.success) navigate('/admin');
-    else setError(result.message || 'Login failed');
+    if (result.success) {
+      setError('');
+      navigate('/admin');
+    } else {
+      setError(result.message || 'Login failed');
+    }
   };
 
   return (

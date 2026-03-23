@@ -7,6 +7,12 @@ const helmet     = require('helmet');
 const rateLimit  = require('express-rate-limit');
 const hpp        = require('hpp');
 
+// ── JWT Secret validation ────────────────────────────────────────────────────
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  console.error('FATAL: JWT_SECRET must be at least 32 characters. Set it in .env');
+  process.exit(1);
+}
+
 const app = express();
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -32,10 +38,10 @@ app.use(globalLimiter);
 // ── Strict rate limiter for auth endpoints ───────────────────────────────────
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 15,                   // 15 login attempts per window
+  max: 10,                   // 10 attempts per window
   standardHeaders: true,
   legacyHeaders: false,
-  message: { success: false, message: 'Too many login attempts, please try again later.' },
+  message: { success: false, message: 'Too many requests, please try again later.' },
 });
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
