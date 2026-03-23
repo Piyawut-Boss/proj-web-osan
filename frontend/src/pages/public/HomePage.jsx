@@ -113,8 +113,8 @@ export default function HomePage() {
               ))}
             </h2>
             <div className="hp-sc-btns">
-              <a href="https://facebook.com/PSUBlen.official" target="_blank" rel="noreferrer" className="hp-sc-btn hp-sc-fb">{t('home_buy_facebook')}</a>
-              <a href="https://line.me" target="_blank" rel="noreferrer" className="hp-sc-btn hp-sc-line">{t('home_buy_line')}</a>
+              <a href="https://www.facebook.com/PSUBlen.official" target="_blank" rel="noopener noreferrer" className="hp-sc-btn hp-sc-fb">{t('home_buy_facebook')}</a>
+              <a href="https://lin.ee/7sVAM9z" target="_blank" rel="noopener noreferrer" className="hp-sc-btn hp-sc-line">{t('home_buy_line')}</a>
               <a href={`tel:${phone.replace(/-/g,'')}`} className="hp-sc-btn hp-sc-tel">{t('tel')} : {phone}</a>
             </div>
           </div>
