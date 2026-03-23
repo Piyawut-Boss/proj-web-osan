@@ -236,6 +236,13 @@
 }
 @media (max-width: 700px) {
   .visitor-grid { grid-template-columns: repeat(2, 1fr); }
+  .visitor-banner { padding: 18px 16px; }
+  .visitor-num { font-size: 1.4rem; }
+  .visitor-card { padding: 14px 12px; }
+  .recent-section, .quick-links { padding: 18px; }
+  .stat-card { padding: 16px 14px; gap: 12px; }
+  .stat-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+  .stat-count { font-size: 1.7rem; }
 }
 @media (max-width: 400px) {
   .visitor-grid { grid-template-columns: 1fr; }

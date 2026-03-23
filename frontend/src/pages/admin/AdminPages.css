@@ -90,4 +90,15 @@
 
 @media (max-width: 600px) {
   .form-row { grid-template-columns: 1fr; }
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .modal-actions .btn {
+    min-width: unset;
+    width: 100%;
+  }
+  .image-upload-area { height: 130px; }
+  .page-content { border-radius: 10px; }
+  .table-summary { padding: 10px 14px; font-size: .8rem; }
 }

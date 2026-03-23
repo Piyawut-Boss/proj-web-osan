@@ -84,3 +84,55 @@
   background: #dc2626;
   color: #fff;
 }
+
+/* ══════════════════════════════════════════════════════════
+   TABLE RESPONSIVE
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .admin-table-wrap {
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-table th {
+    padding: 10px 12px;
+    font-size: .7rem;
+  }
+  .admin-table td {
+    padding: 10px 12px;
+    font-size: .82rem;
+  }
+  .admin-table img {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+  }
+  .action-btns {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .action-btns .btn {
+    padding: 5px 10px;
+    font-size: .74rem;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-table th {
+    padding: 8px 8px;
+    font-size: .66rem;
+  }
+  .admin-table td {
+    padding: 8px 8px;
+    font-size: .78rem;
+  }
+  .admin-table img {
+    width: 34px;
+    height: 34px;
+  }
+  .action-btns .btn {
+    padding: 4px 8px;
+    font-size: .7rem;
+  }
+}

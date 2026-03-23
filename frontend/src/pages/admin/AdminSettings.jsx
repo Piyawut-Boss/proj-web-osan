@@ -189,7 +189,20 @@ export default function AdminSettings() {
         .settings-img-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:2rem;color:var(--text-light)}
         .settings-img-ph span{font-size:.75rem}
         .settings-img-actions{display:flex;flex-direction:column;gap:10px;align-items:flex-start;padding-top:8px}
-        @media(max-width:800px){.settings-layout{grid-template-columns:1fr}.settings-sidebar{position:static;flex-direction:row;flex-wrap:wrap}.settings-img-field{flex-wrap:wrap}}
+        @media(max-width:800px){
+          .settings-layout{grid-template-columns:1fr;gap:16px}
+          .settings-sidebar{position:static;flex-direction:row;flex-wrap:wrap;gap:6px;padding:10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+          .settings-nav-btn{padding:8px 14px;font-size:.78rem;white-space:nowrap;flex-shrink:0}
+          .settings-form{padding:20px}
+          .settings-section-title{font-size:1rem;margin-bottom:18px;padding-bottom:12px}
+          .settings-img-field{flex-wrap:wrap}
+          .settings-img-preview{width:100%;height:120px}
+        }
+        @media(max-width:480px){
+          .settings-form{padding:14px}
+          .settings-nav-btn{padding:7px 10px;font-size:.72rem}
+          .settings-img-preview{height:100px}
+        }
       `}</style>
     </div>
   );
