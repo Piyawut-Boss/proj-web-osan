@@ -251,13 +251,6 @@
 }
 .sidebar-close-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
 
-/* Sidebar link icon */
-.sidebar-link-icon {
-  font-size: 1rem;
-  margin-right: 10px;
-  flex-shrink: 0;
-}
-
 /* Overlay — hidden on desktop */
 .sidebar-overlay {
   display: none;

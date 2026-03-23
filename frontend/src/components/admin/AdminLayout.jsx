@@ -4,14 +4,14 @@ import { useAuth } from '../../context/AuthContext';
 import './AdminLayout.css';
 
 const navItems = [
-  { to:'/admin', label:'แดชบอร์ด', icon:'📊', end:true },
-  { to:'/admin/products', label:'สินค้า', icon:'📦' },
-  { to:'/admin/news', label:'ข่าวสาร', icon:'📰' },
-  { to:'/admin/reviews', label:'รีวิว', icon:'⭐' },
-  { to:'/admin/certificates', label:'ใบรับรอง', icon:'📜' },
-  { to:'/admin/board-members', label:'คณะกรรมการ', icon:'👥' },
-  { to:'/admin/banners', label:'แบนเนอร์', icon:'🖼️' },
-  { to:'/admin/settings', label:'ตั้งค่าเว็บไซต์', icon:'⚙️' },
+  { to:'/admin', label:'แดชบอร์ด', end:true },
+  { to:'/admin/products', label:'สินค้า' },
+  { to:'/admin/news', label:'ข่าวสาร' },
+  { to:'/admin/reviews', label:'รีวิว' },
+  { to:'/admin/certificates', label:'ใบรับรอง' },
+  { to:'/admin/board-members', label:'คณะกรรมการ' },
+  { to:'/admin/banners', label:'แบนเนอร์' },
+  { to:'/admin/settings', label:'ตั้งค่าเว็บไซต์' },
 ];
 
 export default function AdminLayout() {
@@ -45,13 +45,12 @@ export default function AdminLayout() {
           {navItems.map(item => (
             <NavLink key={item.to} to={item.to} end={item.end}
               className={({isActive}) => `sidebar-link${isActive?' active':''}`}>
-              <span className="sidebar-link-icon">{item.icon}</span>
               {item.label}
             </NavLink>
           ))}
         </nav>
         <div className="sidebar-footer">
-          <p className="sidebar-user">👤 {user?.username || 'Admin'}</p>
+          <p className="sidebar-user">{user?.username || 'Admin'}</p>
           <button className="btn btn-danger btn-sm" onClick={handleLogout}>ออกจากระบบ</button>
         </div>
       </aside>
