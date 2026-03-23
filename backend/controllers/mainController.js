@@ -227,7 +227,7 @@ const updateReview = async (req, res) => {
     await db.execute(
       'UPDATE reviews SET title=?, description=?, image=?, published_date=?, link_url=?, is_active=? WHERE id=?',
       [title || existing[0].title, description ?? existing[0].description,
-       image, published_date ?? existing[0].published_date, link_url ?? existing[0].link_url, 
+       image, published_date || existing[0].published_date || null, link_url ?? existing[0].link_url, 
        toBool(is_active, existing[0].is_active), req.params.id]
     );
     res.json({ success: true, message: 'Review updated' });
