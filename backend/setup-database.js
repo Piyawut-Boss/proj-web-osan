@@ -174,7 +174,7 @@ async function setupDatabase() {
       // Default admin (bcrypt hashed, 12 rounds)
       await connection.execute(
         "INSERT INTO admins (username, password) VALUES (?, ?)",
-        ['psuadmin', '$2b$12$unurNlOuKhfV3vcXMu0EY.kUrDXKJQCDZlLCIPeVBW8.D4cBTog7e']
+        ['psuadmin', '$2b$12$c5IvTjElGRCfela/of7UK.PtzFQMA1hKKI782ikqsZjhq9KK2cdD.']
       );
       console.log('   ✅ Admin user created (username: psuadmin)');
     } else {

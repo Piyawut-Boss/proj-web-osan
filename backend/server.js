@@ -22,7 +22,7 @@ app.use(hpp());
 // ── Global rate limiter ──────────────────────────────────────────────────────
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 300,                  // 300 requests per window per IP
+  max: 1000,                 // 1000 requests per window per IP
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Too many requests, please try again later.' },

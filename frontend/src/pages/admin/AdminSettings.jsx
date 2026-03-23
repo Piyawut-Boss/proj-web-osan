@@ -5,7 +5,6 @@ import { invalidateSettings } from '../../hooks/useSettings';
 import './AdminPages.css';
 
 const SECTIONS = [
-  { key:'hero', label:'Hero Banner' },
   { key:'showcase', label:'PSU Blen Showcase' },
   { key:'mealbox', label:'อาหารกล่อง' },
   { key:'today', label:'PSU Agro Food Today' },
@@ -19,7 +18,7 @@ const SECTIONS = [
 
 export default function AdminSettings() {
   const [allSettings, setAllSettings] = useState([]);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState('showcase');
   const [formData, setFormData] = useState({});
   const [imageFiles, setImageFiles] = useState({});
   const [imagePreviews, setImagePreviews] = useState({});
@@ -111,11 +110,11 @@ export default function AdminSettings() {
         <div className="settings-form">
           <h2 className="settings-section-title">{SECTIONS.find(s=>s.key===activeSection)?.label}</h2>
           
-          {/* CAROUSEL MANAGER FOR HERO AND PRODUCTS */}
-          {['hero', 'products'].includes(activeSection) && (
+          {/* CAROUSEL MANAGER FOR PRODUCTS */}
+          {activeSection === 'products' && (
             <CarouselManager 
               section={activeSection}
-              label={activeSection === 'hero' ? 'Slide Banner' : 'Slide Banner'}
+              label="Slide Banner"
               onAlert={showAlert}
             />
           )}
@@ -123,8 +122,8 @@ export default function AdminSettings() {
           {sectionSettings.length === 0 && <p style={{color:'var(--text-light)'}}>ไม่มีการตั้งค่าในส่วนนี้</p>}
           {(() => {
             const filtered = sectionSettings.filter(s => {
-              // For hero and products sections, hide ALL fields - ONLY carousel manager allowed
-              if (['hero', 'products'].includes(activeSection)) {
+              // For products section, hide ALL fields - ONLY carousel manager allowed
+              if (activeSection === 'products') {
                 return false; // Hide all fields for these sections
               }
               return true;
