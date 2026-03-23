@@ -19,7 +19,12 @@ export default function ContactPage() {
 
   const mapUrl = get(
     'contact_map_url',
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951!2d100.47!3d7.00!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNw!5e0!3m2!1sen!2sth!4v1'
+    'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3951!2d100.4995871!3d7.004028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2z7YKwMDAn14.5Ik4gMTAwwrAzMCcwNy44IkU!5e0!3m2!1sen!2sth'
+  );
+
+  const mapLink = get(
+    'contact_map_link',
+    'https://www.google.com/maps/place/7%C2%B000\'14.5%22N+100%C2%B030\'07.8%22E/@7.004028,100.4995871,17z/data=!3m1!4b1!4m4!3m3!8m2!3d7.004028!4d100.502162'
   );
 
   useEffect(() => {
@@ -84,7 +89,7 @@ export default function ContactPage() {
               </div>
 
               <a
-                href={`https://maps.google.com/?q=${get('contact_address','')}`}
+                href={mapLink}
                 target="_blank"
                 rel="noreferrer"
                 className="ct-map-link"

@@ -235,7 +235,8 @@ INSERT INTO site_settings (setting_key, setting_value, setting_type, label, sect
 ('contact_email_url','mailto:psuagrofood.factory@gmail.com','text','Email URL','contact'),
 ('contact_facebook_url','https://www.facebook.com/PSUBlen.official','text','Facebook URL','contact'),
 ('contact_tiktok_url','https://www.tiktok.com/@psuagrofood.factory','text','TikTok URL','contact'),
-('contact_map_url','https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15805.64!2d100.4736!3d7.0067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304d4c4a53571b07%3A0x748a58dc29440f0c!2sPSU%20Agro%20Food!5e0!3m2!1sth!2sth!4v1700000000000','textarea','Google Maps Embed URL','contact'),
+('contact_map_url','https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3951!2d100.4995871!3d7.004028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNyswMCcxNC41Ik4gMTAwKzMwJzA3LjgiRQ!5e0!3m2!1sen!2sth','textarea','Google Maps Embed URL','contact'),
+('contact_map_link','https://www.google.com/maps/place/7%C2%B000''14.5%22N+100%C2%B030''07.8%22E/@7.004028,100.4995871,17z/data=!3m1!4b1!4m4!3m3!8m2!3d7.004028!4d100.502162','text','Google Maps Link','contact'),
 -- ── FOOTER ────────────────────────────────────────────────────────────────
 ('footer_company_th','บริษัท พี เอส ยู อะโกรฟู้ด จำกัด','text','ชื่อบริษัท Footer (ไทย)','footer'),
 ('footer_company_en','PSU AGRO FOOD CO., LTD.','text','ชื่อบริษัท Footer (อังกฤษ)','footer'),
