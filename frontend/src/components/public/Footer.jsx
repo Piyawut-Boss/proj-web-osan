@@ -37,22 +37,30 @@ export default function Footer() {
 
               <p>
                 <img src="/line.png" alt="line" className="footer-icon" />
-                line id: {get('contact_line', '@PSUBlen.official')}
+                <a href="https://lin.ee/7sVAM9z" target="_blank" rel="noopener noreferrer">
+                  line id: {get('contact_line', '@PSUBlen.official')}
+                </a>
               </p>
 
               <p>
                 <img src="/google.png" alt="email" className="footer-icon" />
-                {get('contact_email', 'psuagrofood.factory@gmail.com')}
+                <a href={`mailto:${get('contact_email', 'psuagrofood.factory@gmail.com')}`}>
+                  {get('contact_email', 'psuagrofood.factory@gmail.com')}
+                </a>
               </p>
 
               <p>
                 <img src="/facebook.png" alt="facebook" className="footer-icon" />
-                facebook: {get('contact_facebook', 'PSU Blen.official')}
+                <a href="https://www.facebook.com/PSUBlen.official" target="_blank" rel="noopener noreferrer">
+                  facebook: {get('contact_facebook', 'PSU Blen.official')}
+                </a>
               </p>
 
               <p>
                 <img src="/tik-tok.png" alt="tiktok" className="footer-icon" />
-                tiktok: {get('contact_tiktok', 'PSU Blen.official ,psuagrofood.factory')}
+                <a href="https://www.tiktok.com/@psuagrofood.factory" target="_blank" rel="noopener noreferrer">
+                  tiktok: {get('contact_tiktok', 'PSU Blen.official ,psuagrofood.factory')}
+                </a>
               </p>
 
             </div>
