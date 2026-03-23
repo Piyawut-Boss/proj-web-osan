@@ -187,11 +187,20 @@ export const AdminBanners = () => {
     }catch{showAlert('เกิดข้อผิดพลาด','error')}finally{setSaving(false)}
   };
   const del=async id=>{try{await api.delete(`/banners/${id}`);showAlert('ลบสำเร็จ');refetch()}catch{showAlert('เกิดข้อผิดพลาด','error')}};
+  const toggleActive=async(row)=>{
+    try{
+      const fd=new FormData();
+      fd.append('is_active',String(!row.is_active));
+      await api.put(`/banners/${row.id}`,fd,{headers:{'Content-Type':'multipart/form-data'}});
+      showAlert(row.is_active?'ซ่อนแบนเนอร์แล้ว':'เผยแพร่แบนเนอร์แล้ว');
+      refetch();
+    }catch{showAlert('เกิดข้อผิดพลาด','error')}
+  };
   const cols=[
     {key:'image',label:'รูป',render:v=>v?<img src={v} alt="" style={{height:50,width:90,objectFit:'cover',borderRadius:6}}/>:<span style={{color:'var(--text-light)',fontSize:'.8rem'}}>ไม่มีรูป</span>},
     {key:'title',label:'หัวข้อ',render:v=>v||'—'},
     {key:'sort_order',label:'ลำดับ'},
-    {key:'is_active',label:'สถานะ',render:v=><span className={`badge ${v?'badge-accent':'badge-primary'}`}>{v?'เผยแพร่':'ซ่อน'}</span>},
+    {key:'is_active',label:'สถานะ',render:(v,row)=><span className={`badge ${v?'badge-accent':'badge-primary'}`} style={{cursor:'pointer'}} onClick={()=>toggleActive(row)}>{v?'เผยแพร่':'ซ่อน'}</span>},
   ];
   return (
     <div className="admin-page">
