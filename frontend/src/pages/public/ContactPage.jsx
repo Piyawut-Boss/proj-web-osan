@@ -8,12 +8,13 @@ export default function ContactPage() {
   const { get } = useSettings();
   const { t } = useLanguage();
 
+  const phone = get('contact_phone','062-163-9888 , 097-125-8615');
   const contacts = [
-    { icon: '/phone-call.png', title: t('contact_phone'), value: get('contact_phone','062-163-9888 , 097-125-8615') },
-    { icon: '/line.png', title: t('contact_line'), value: get('contact_line','@PSUBlen.official') },
-    { icon: '/google.png', title: t('contact_email'), value: get('contact_email','psuagrofood.factory@gmail.com') },
-    { icon: '/facebook.png', title: t('contact_facebook'), value: get('contact_facebook','PSU Blen.official') },
-    { icon: '/tik-tok.png', title: t('contact_tiktok'), value: get('contact_tiktok','PSU Blen.official ,psuagrofood.factory') },
+    { icon: '/phone-call.png', title: t('contact_phone'), value: phone, href: `tel:${phone.split(',')[0].trim().replace(/-/g,'')}` },
+    { icon: '/line.png', title: t('contact_line'), value: get('contact_line','@PSUBlen.official'), href: get('contact_line_url','https://lin.ee/7sVAM9z') },
+    { icon: '/google.png', title: t('contact_email'), value: get('contact_email','psuagrofood.factory@gmail.com'), href: get('contact_email_url',`mailto:${get('contact_email','psuagrofood.factory@gmail.com')}`) },
+    { icon: '/facebook.png', title: t('contact_facebook'), value: get('contact_facebook','PSU Blen.official'), href: get('contact_facebook_url','https://www.facebook.com/PSUBlen.official') },
+    { icon: '/tik-tok.png', title: t('contact_tiktok'), value: get('contact_tiktok','PSU Blen.official ,psuagrofood.factory'), href: get('contact_tiktok_url','https://www.tiktok.com/@psuagrofood.factory') },
   ];
 
   const mapUrl = get(
@@ -52,7 +53,7 @@ export default function ContactPage() {
 
               <div className="ct-contacts">
                 {contacts.map((c, i) => (
-                  <div key={i} className="ct-row">
+                  <a key={i} className="ct-row" href={c.href} target={c.href.startsWith('mailto:') || c.href.startsWith('tel:') ? undefined : '_blank'} rel="noopener noreferrer" style={{textDecoration:'none',color:'inherit'}}>
                     <img
                       src={c.icon}
                       alt={c.title}
@@ -62,7 +63,7 @@ export default function ContactPage() {
                     <span className="ct-label">
                       <strong>{c.title} :</strong> {c.value}
                     </span>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>

@@ -231,6 +231,10 @@ INSERT INTO site_settings (setting_key, setting_value, setting_type, label, sect
 ('contact_email','psuagrofood.factory@gmail.com','text','Email','contact'),
 ('contact_facebook','PSU Blen.official','text','Facebook','contact'),
 ('contact_tiktok','PSU Blen.official ,psuagrofood.factory','text','TikTok','contact'),
+('contact_line_url','https://lin.ee/7sVAM9z','text','Line URL','contact'),
+('contact_email_url','mailto:psuagrofood.factory@gmail.com','text','Email URL','contact'),
+('contact_facebook_url','https://www.facebook.com/PSUBlen.official','text','Facebook URL','contact'),
+('contact_tiktok_url','https://www.tiktok.com/@psuagrofood.factory','text','TikTok URL','contact'),
 ('contact_map_url','https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15805.64!2d100.4736!3d7.0067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x304d4c4a53571b07%3A0x748a58dc29440f0c!2sPSU%20Agro%20Food!5e0!3m2!1sth!2sth!4v1700000000000','textarea','Google Maps Embed URL','contact'),
 -- ── FOOTER ────────────────────────────────────────────────────────────────
 ('footer_company_th','บริษัท พี เอส ยู อะโกรฟู้ด จำกัด','text','ชื่อบริษัท Footer (ไทย)','footer'),
